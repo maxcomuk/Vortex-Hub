@@ -87,6 +87,10 @@ function Window:CreateTab(Name)
 	TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 	TextButton.TextSize = 15.000
 	TextButton.TextWrapped = true
+	
+	local UIAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
+	UIAspectRatioConstraint.Parent = TextButton
+	UIAspectRatioConstraint.AspectRatio = 2.700
 end
 
 return Window
