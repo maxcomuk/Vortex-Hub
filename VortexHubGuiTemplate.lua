@@ -75,7 +75,8 @@ end
 
 function Window:CreateTab(Name)
 	local TextButton = Instance.new("TextButton")
-	TextButton.Parent = Tabs
+	TextButton.Name = Name
+	TextButton.Parent = self.root.Main.Tabs
 	TextButton.AnchorPoint = Vector2.new(0.5, 0.5)
 	TextButton.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
 	TextButton.BackgroundTransparency = 1.000
