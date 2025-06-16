@@ -23,7 +23,7 @@ function Window.new()
 	Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Main.BorderSizePixel = 0
 	Main.Position = UDim2.new(0, 640, 0, 273)
-	Main.Size = UDim2.new(0.5, 0, 0.600000024, 0)
+	Main.Size = UDim2.new(0.4, 0.5)
 	
 
 	local Title = Instance.new("TextLabel")
