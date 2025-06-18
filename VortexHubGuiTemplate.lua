@@ -1,3 +1,5 @@
+-- only a framework test it looks trash ik :/
+
 local Window = {}
 Window.__index = Window
 
