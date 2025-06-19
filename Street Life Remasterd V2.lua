@@ -72,7 +72,7 @@ old = hookmetamethod(game, "__namecall", function(self, ...)
     return old(self, ...)
 end)
 
-local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
+local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/maxcomuk/Vortex-Hub/main/LunaUi.lua", true))()
 
 local Window = Luna:CreateWindow({
 	Name = "Street Life Remasterd - Vortex Hub V2.0",
