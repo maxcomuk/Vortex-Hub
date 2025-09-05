@@ -100,3 +100,17 @@ RunService.Heartbeat:Connect(function()
         end
     end
 end)
+
+while task.wait() do
+	for _, plr in pairs(Players:GetPlayers()) do
+		if plr ~= Player and plr.Character then
+			local PlrRoot = plr.Character:FindFirstChild("HumanoidRootPart")
+			if PlrRoot then
+				PlrRoot.Size = Vector3.new(10, 10, 10)
+				PlrRoot.Transparency = 0.5
+				PlrRoot.Color = Color3.fromRGB(68, 81, 165)
+				PlrRoot.CanCollide = false
+			end	
+		end	
+	end
+end
