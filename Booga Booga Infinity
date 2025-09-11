@@ -61,7 +61,6 @@ function AutoPickupMod:Enable()
         if Debounce then return end 
         Debounce = true
         PickupObject()
-        task.wait(0.3)
         Debounce = false
     end)
 end
