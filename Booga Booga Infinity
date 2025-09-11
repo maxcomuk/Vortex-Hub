@@ -1,0 +1,89 @@
+-- Getting Ui Libary
+local library = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/0x"))()
+
+-- Creating Window
+local window = library:Window("Booga Booga Infinity")
+
+-- Creating Players + Player Entity
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+-- Getting Services
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Events
+local PickupEvent = ReplicatedStorage.Events.Pickup
+
+-- Auto Pickup Mod
+local AutoPickupMod = {}
+AutoPickupMod.conn1 = nil
+
+-- Auto Pickup Function
+function AutoPickupMod:Enable()
+    if self.conn1 then
+        self.conn1:Disconnect()
+        self.conn1 = nil
+    end
+
+    local Char = Player.Character or Player.CharacterAdded:Wait()
+    local Root = Char:WaitForChild("HumanoidRootPart")
+
+    local function FindTarget()
+        local Target = nil
+        local MaxDistance = 50
+        local Folder = workspace:FindFirstChild("Pickup")
+        for _, obj in pairs(Folder:GetChildren()) do
+            if obj:IsA("Model") then
+                local ModelDistance = (obj:GetPivot().Position - Root.Position).Magnitude
+                if ModelDistance < MaxDistance then
+                    MaxDistance = ModelDistance
+                    Target = obj
+                end
+            elseif obj:IsA("BasePart") then
+                local Distance = (obj.Position - Root.Position).Magnitude
+                if Distance < MaxDistance then
+                    MaxDistance = Distance
+                    Target = obj
+                end
+            end
+        end
+        return Target
+    end
+
+    local function PickupObject()
+        local Target = FindTarget()
+        if Target then
+            PickupEvent:InvokeServer(Target)
+        end
+    end
+
+    local Debounce = false
+    self.conn1 = RunService.Heartbeat:Connect(function()
+        if Debounce then return end 
+        Debounce = true
+        PickupObject()
+        Debounce = false
+    end)
+end
+
+function AutoPickupMod:Disable()
+    if self.conn1 then
+        self.conn1:Disconnect()
+        self.conn1 = nil
+    end
+end
+
+-- Creating Auto pickup Toggle
+window:Toggle(
+    "Auto Pickup",
+    "Picks up everything within the range selected",
+    false,
+    function(State)
+        if State then
+            AutoPickupMod:Enable()
+        else
+            AutoPickupMod:Disable()
+        end
+    end
+)
