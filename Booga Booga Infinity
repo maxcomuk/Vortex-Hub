@@ -13,7 +13,7 @@ local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- Events
-local PickupEvent = ReplicatedStorage.Events.Pickup
+local PickupEvent = game:GetService("ReplicatedStorage").Events.Pickup
 
 -- Auto Pickup Mod
 local AutoPickupMod = {}
@@ -32,15 +32,14 @@ function AutoPickupMod:Enable()
     local function FindTarget()
         local Target = nil
         local MaxDistance = 50
-        local Folder = workspace:FindFirstChild("Pickup")
-        for _, obj in pairs(Folder:GetChildren()) do
-            if obj:IsA("Model") then
+        for _, obj in pairs(workspace:GetChildren()) do
+            if obj:IsA("Model") and obj:FindFirstChild("Pickup") then
                 local ModelDistance = (obj:GetPivot().Position - Root.Position).Magnitude
                 if ModelDistance < MaxDistance then
                     MaxDistance = ModelDistance
                     Target = obj
                 end
-            elseif obj:IsA("BasePart") then
+            elseif obj:IsA("BasePart") and obj:FindFirstChild("Pickup") then
                 local Distance = (obj.Position - Root.Position).Magnitude
                 if Distance < MaxDistance then
                     MaxDistance = Distance
@@ -54,7 +53,7 @@ function AutoPickupMod:Enable()
     local function PickupObject()
         local Target = FindTarget()
         if Target then
-            PickupEvent:InvokeServer(Target)
+            PickupEvent:FireServer(Target)
         end
     end
 
@@ -63,6 +62,7 @@ function AutoPickupMod:Enable()
         if Debounce then return end 
         Debounce = true
         PickupObject()
+        task.wait(0.3)
         Debounce = false
     end)
 end
@@ -87,3 +87,5 @@ window:Toggle(
         end
     end
 )
+
+loadstring(game:HttpGet("https://github.com/maxcomuk/Vortex-Hub/blob/main/Booga%20Booga%20Infinity"))()
