@@ -10,7 +10,6 @@ local Player = Players.LocalPlayer
 
 -- Getting Services
 local RunService = game:GetService("RunService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- Events
 local PickupEvent = game:GetService("ReplicatedStorage").Events.Pickup
@@ -87,5 +86,3 @@ window:Toggle(
         end
     end
 )
-
-loadstring(game:HttpGet("https://github.com/maxcomuk/Vortex-Hub/blob/main/Booga%20Booga%20Infinity"))()
