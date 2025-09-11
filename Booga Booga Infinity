@@ -1,5 +1,5 @@
 -- Getting Ui Libary
-local library = loadstring(game.HttpGet(game, "https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/0x"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/0x"))()
 
 -- Creating Window
 local window = library:Window("Booga Booga Infinity")
