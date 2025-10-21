@@ -1793,9 +1793,8 @@ if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
 	StarlightUI.Notifications.Interactable = false
 end
 
-local touchGui = PlayerGui:FindFirstChild("TouchGui")
-if touchGui then
-	local controlFrame = touchGui:FindFirstChild("TouchControlFrame")
+if PlayerGui:FindFirstChild("TouchGui") then
+	local controlFrame = PlayerGui:FindFirstChild("TouchGui"):FindFirstChild("TouchControlFrame")
 	local jumpButton = controlFrame and controlFrame:FindFirstChild("JumpButton")
 
 	local function check()
