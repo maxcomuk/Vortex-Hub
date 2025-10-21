@@ -1793,19 +1793,17 @@ if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
 	StarlightUI.Notifications.Interactable = false
 end
 
---[[
 if PlayerGui:FindFirstChild("TouchGui") then
 	function check()
-		if PlayerGui:FindFirstChild("TouchGui").TouchControlFrame.JumpButton.Visible then
+		if PlayerGui:FindFirstChild("TouchGui"):FindFirstChild("TouchControlFrame"):FindFirstChild("JumpButton") and PlayerGui:FindFirstChild("TouchGui"):FindFirstChild("TouchControlFrame"):FindFirstChild("JumpButton").Visible then
 			StarlightUI.Notifications.Position = UDim2.new(1,-20,1,-(24 + PlayerGui:FindFirstChild("TouchGui").TouchControlFrame.JumpButton.AbsoluteSize.Y))
 		else
 	StarlightUI.Notifications.Position = UDim2.new(1,-20,1,-20)
 		end
 	end
-	PlayerGui:FindFirstChild("TouchGui").TouchControlFrame.JumpButton:GetPropertyChangedSignal("Visible"):Connect(check)
+	PlayerGui:FindFirstChild("TouchGui"):FindFirstChild("TouchControlFrame"):FindFirstChild("JumpButton"):GetPropertyChangedSignal("Visible"):Connect(check)
 	check()
 end
---]]
 
 --// ENDSECTION
 
