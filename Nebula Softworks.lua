@@ -148,7 +148,7 @@ else
 end
 
 local isStudio = RunService:IsStudio() or false
-local Acrylic = isStudio and require(ReplicatedStorage.AcrylicBundled) or loadstring(game:HttpGet("https://raw.nebulasoftworks.xyz/starlight/AcrylicModule.luau"))()
+local Acrylic = loadstring(game:HttpGet("https://raw.nebulasoftworks.xyz/starlight/AcrylicModule.luau"))()
 pcall(function()
 	Acrylic.Init()
 end)
