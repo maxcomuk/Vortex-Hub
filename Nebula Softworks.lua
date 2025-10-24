@@ -148,7 +148,7 @@ else
 end
 
 local isStudio = RunService:IsStudio() or false
-local Acrylic = loadstring(game:HttpGet("https://raw.nebulasoftworks.xyz/starlight/AcrylicModule.luau"))()
+local Acrylic = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Starlight-Interface-Suite/master/Modules/Acrylic/Build.luau"))()
 pcall(function()
 	Acrylic.Init()
 end)
