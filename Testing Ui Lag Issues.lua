@@ -1305,65 +1305,6 @@ local function Unhide(Interface)
 		Interface.Visible = true
 	end
 
-
-	for i,v in pairs(Interface:GetDescendants()) do
-		if  v.ClassName ~= "Folder" 
-			and v.ClassName ~= "UICorner" 
-			and v.ClassName ~= "StringValue"
-			and v.ClassName ~= "Color3Value" 
-			and v.ClassName ~= "UIListLayout" 
-			and v.ClassName ~= "UITextSizeConstraint" 
-			and v.ClassName ~= "UIPadding"
-			and v.ClassName ~= "UIPageLayout"
-			and v.ClassName ~= "UISizeConstraint"
-			and v.ClassName ~= "UIAspectRatioConstraint"
-		then
-
-			pcall(function()
-				if (v.ClassName == "Frame") and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency ~= nil then
-					Tween(v, {BackgroundTransparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency})
-				end
-
-				if (v.ClassName == "TextLabel" or v.ClassName == "TextBox" or v.ClassName == "TextButton") and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency ~= nil  and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].TextTransparency ~= nil then
-					Tween(v, {BackgroundTransparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency})
-					Tween(v, {TextTransparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].TextTransparency})
-				end
-
-				if (v.ClassName == "ImageLabel" or v.ClassName == "ImageButton") and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency ~= nil and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].ImageTransparency then
-					Tween(v, {BackgroundTransparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency})
-					Tween(v, {ImageTransparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].ImageTransparency})
-				end
-
-				if (v.ClassName == "UIStroke" or Interface.ClassName == "UIGradient") and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].Transparency then
-					Tween(v, {Transparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].Transparency})
-				end
-			end)
-
-		end
-	end
-
-	pcall(function()
-		if Interface.ClassName ~= "ScreenGui" then
-			if (Interface.ClassName == "Frame") and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency ~= nil then
-				Tween(Interface, {BackgroundTransparency = TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency})
-			end
-
-			if (Interface.ClassName == "TextLabel" or Interface.ClassName == "TextBox" or Interface.ClassName == "TextButton") and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency ~= nil  and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].TextTransparency ~= nil then
-				Tween(Interface, {BackgroundTransparency = TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency})
-				Tween(Interface, {TextTransparency = TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].TextTransparency})
-			end
-
-			if (Interface.ClassName == "ImageLabel" or Interface.ClassName == "ImageButton") and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency ~= nil and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].ImageTransparency then
-				Tween(Interface, {BackgroundTransparency = TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency})
-				Tween(Interface, {ImageTransparency = TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].ImageTransparency})
-			end
-
-			if (Interface.ClassName == "UIStroke" or Interface.ClassName == "UIGradient") and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].Transparency then
-				Tween(Interface, {Transparency = TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].Transparency})
-			end
-		end
-	end)
-
 	Starlight.Minimized = false
 end
 
