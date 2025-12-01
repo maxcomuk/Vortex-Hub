@@ -1181,133 +1181,117 @@ local function Hide(Interface, JustHide: boolean?, Notify: boolean?, Bind: strin
 	JustHide = JustHide or false
 
 	TransparencyValues[Interface.Name] = TransparencyValues[Interface.Name] or {}
-	-- Clear Table
 	table.clear(TransparencyValues[Interface.Name])
 
-	for i, v in pairs(Interface:GetDescendants()) do
+	for _, v in pairs(Interface:GetDescendants()) do
+		local class = v.ClassName
 		if
-			v.ClassName ~= "Folder"
-			and v.ClassName ~= "UICorner"
-			and v.ClassName ~= "StringValue"
-			and v.ClassName ~= "Color3Value"
-			and v.ClassName ~= "UIListLayout"
-			and v.ClassName ~= "UITextSizeConstraint"
-			and v.ClassName ~= "UIPadding"
-			and v.ClassName ~= "UIPageLayout"
-			and v.ClassName ~= "UISizeConstraint"
-			and v.ClassName ~= "UIAspectRatioConstraint"
+			class ~= "Folder"
+			and class ~= "UICorner"
+			and class ~= "StringValue"
+			and class ~= "Color3Value"
+			and class ~= "UIListLayout"
+			and class ~= "UITextSizeConstraint"
+			and class ~= "UIPadding"
+			and class ~= "UIPageLayout"
+			and class ~= "UISizeConstraint"
+			and class ~= "UIAspectRatioConstraint"
 		then
-			-- Create And Set Subtables
 			if JustHide == false then
-				v:SetAttribute("InstanceID", HttpService:GenerateGUID(false)) -- we are doing this cus roblox fucking removed/disabled the UniqueId feature, and stuff might have the same name
+				v:SetAttribute("InstanceID", HttpService:GenerateGUID(false))
+				local id = v:GetAttribute("InstanceID")
+				TransparencyValues[Interface.Name][id] = {}
 
-				TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")] = {}
-
-				if v.ClassName == "Frame" then
-					TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency =
-						v.BackgroundTransparency
+				if class == "Frame" then
+					TransparencyValues[Interface.Name][id].BackgroundTransparency = v.BackgroundTransparency
 				end
 
-				if v.ClassName == "TextLabel" or v.ClassName == "TextBox" or v.ClassName == "TextButton" then
-					TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency =
-						v.BackgroundTransparency
-					TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].TextTransparency =
-						v.TextTransparency
+				if class == "TextLabel" or class == "TextBox" or class == "TextButton" then
+					TransparencyValues[Interface.Name][id].BackgroundTransparency = v.BackgroundTransparency
+					TransparencyValues[Interface.Name][id].TextTransparency = v.TextTransparency
 				end
 
-				if v.ClassName == "ImageLabel" or v.ClassName == "ImageButton" then
-					TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency =
-						v.BackgroundTransparency
-					TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].ImageTransparency =
-						v.ImageTransparency
+				if class == "ImageLabel" or class == "ImageButton" then
+					TransparencyValues[Interface.Name][id].BackgroundTransparency = v.BackgroundTransparency
+					TransparencyValues[Interface.Name][id].ImageTransparency = v.ImageTransparency
 				end
 
-				-- do this cus roblox gui stuff have a although deprecated class, its still accesible by scripts
-				-- and sets text and transparency values which is smth we dont want
-				if v.ClassName == "UIStroke" or v.ClassName == "UIGradient" then
-					TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].Transparency = v.Transparency
+				if class == "UIStroke" or class == "UIGradient" then
+					TransparencyValues[Interface.Name][id].Transparency = v.Transparency
 				end
 			end
 
-			-- Actually Hide The Stuff
-			if v.ClassName == "Frame" then
-				Tween(v, { BackgroundTransparency = 1 })
+			local props = {}
+			if class == "Frame" then
+				props.BackgroundTransparency = 1
 			end
 
-			if v.ClassName == "TextLabel" or v.ClassName == "TextBox" or v.ClassName == "TextButton" then
-				Tween(v, { BackgroundTransparency = 1 })
-				Tween(v, { TextTransparency = 1 })
+			if class == "TextLabel" or class == "TextBox" or class == "TextButton" then
+				props.BackgroundTransparency = 1
+				props.TextTransparency = 1
 			end
 
-			if v.ClassName == "ImageLabel" or v.ClassName == "ImageButton" then
-				Tween(v, { BackgroundTransparency = 1 })
-				Tween(v, { ImageTransparency = 1 })
+			if class == "ImageLabel" or class == "ImageButton" then
+				props.BackgroundTransparency = 1
+				props.ImageTransparency = 1
 			end
 
-			if v.ClassName == "UIStroke" or Interface.ClassName == "UIGradient" then
-				Tween(v, { Transparency = 1 })
+			if class == "UIStroke" or class == "UIGradient" then
+				props.Transparency = 1
+			end
+
+			if next(props) then
+				Tween(v, props)
 			end
 		end
 	end
 
 	if Interface.ClassName ~= "ScreenGui" then
 		if JustHide == false then
-			Interface:SetAttribute("InstanceID", HttpService:GenerateGUID(false)) -- we are doing this cus roblox fucking removed/disabled the UniqueId feature, and stuff might have the same name
-
-			TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")] = {}
+			Interface:SetAttribute("InstanceID", HttpService:GenerateGUID(false))
+			local id = Interface:GetAttribute("InstanceID")
+			TransparencyValues[Interface.Name][id] = {}
 
 			if Interface.ClassName == "Frame" then
-				TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency =
-					Interface.BackgroundTransparency
+				TransparencyValues[Interface.Name][id].BackgroundTransparency = Interface.BackgroundTransparency
 			end
 
-			if
-				Interface.ClassName == "TextLabel"
-				or Interface.ClassName == "TextBox"
-				or Interface.ClassName == "TextButton"
-			then
-				TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency =
-					Interface.BackgroundTransparency
-				TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].TextTransparency =
-					Interface.TextTransparency
+			if Interface.ClassName == "TextLabel" or Interface.ClassName == "TextBox" or Interface.ClassName == "TextButton" then
+				TransparencyValues[Interface.Name][id].BackgroundTransparency = Interface.BackgroundTransparency
+				TransparencyValues[Interface.Name][id].TextTransparency = Interface.TextTransparency
 			end
 
 			if Interface.ClassName == "ImageLabel" or Interface.ClassName == "ImageButton" then
-				TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency =
-					Interface.BackgroundTransparency
-				TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].ImageTransparency =
-					Interface.ImageTransparency
+				TransparencyValues[Interface.Name][id].BackgroundTransparency = Interface.BackgroundTransparency
+				TransparencyValues[Interface.Name][id].ImageTransparency = Interface.ImageTransparency
 			end
 
-			-- do this cus roblox gui stuff have a although deprecated class, its still accesible by scripts
-			-- and sets text and transparency values which is smth we dont want
 			if Interface.ClassName == "UIStroke" or Interface.ClassName == "UIGradient" then
-				TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].Transparency =
-					Interface.Transparency
+				TransparencyValues[Interface.Name][id].Transparency = Interface.Transparency
 			end
 		end
 
-		-- Actually Hide The Stuff
+		local iprops = {}
 		if Interface.ClassName == "Frame" then
-			Tween(Interface, { BackgroundTransparency = 1 })
+			iprops.BackgroundTransparency = 1
 		end
 
-		if
-			Interface.ClassName == "TextLabel"
-			or Interface.ClassName == "TextBox"
-			or Interface.ClassName == "TextButton"
-		then
-			Tween(Interface, { BackgroundTransparency = 1 })
-			Tween(Interface, { TextTransparency = 1 })
+		if Interface.ClassName == "TextLabel" or Interface.ClassName == "TextBox" or Interface.ClassName == "TextButton" then
+			iprops.BackgroundTransparency = 1
+			iprops.TextTransparency = 1
 		end
 
 		if Interface.ClassName == "ImageLabel" or Interface.ClassName == "ImageButton" then
-			Tween(Interface, { BackgroundTransparency = 1 })
-			Tween(Interface, { ImageTransparency = 1 })
+			iprops.BackgroundTransparency = 1
+			iprops.ImageTransparency = 1
 		end
 
 		if Interface.ClassName == "UIStroke" or Interface.ClassName == "UIGradient" then
-			Tween(Interface, { Transparency = 1 })
+			iprops.Transparency = 1
+		end
+
+		if next(iprops) then
+			Tween(Interface, iprops)
 		end
 	end
 
@@ -1339,7 +1323,6 @@ local function Hide(Interface, JustHide: boolean?, Notify: boolean?, Bind: strin
 	Starlight.Minimized = true
 end
 
--- Unhides the given object which has been hidden by hide
 local function Unhide(Interface)
 	if Interface.ClassName == "ScreenGui" then
 		Interface.Enabled = true
@@ -1347,79 +1330,56 @@ local function Unhide(Interface)
 		Interface.Visible = true
 	end
 
-	for i, v in pairs(Interface:GetDescendants()) do
+	for _, v in pairs(Interface:GetDescendants()) do
+		local class = v.ClassName
 		if
-			v.ClassName ~= "Folder"
-			and v.ClassName ~= "UICorner"
-			and v.ClassName ~= "StringValue"
-			and v.ClassName ~= "Color3Value"
-			and v.ClassName ~= "UIListLayout"
-			and v.ClassName ~= "UITextSizeConstraint"
-			and v.ClassName ~= "UIPadding"
-			and v.ClassName ~= "UIPageLayout"
-			and v.ClassName ~= "UISizeConstraint"
-			and v.ClassName ~= "UIAspectRatioConstraint"
+			class ~= "Folder"
+			and class ~= "UICorner"
+			and class ~= "StringValue"
+			and class ~= "Color3Value"
+			and class ~= "UIListLayout"
+			and class ~= "UITextSizeConstraint"
+			and class ~= "UIPadding"
+			and class ~= "UIPageLayout"
+			and class ~= "UISizeConstraint"
+			and class ~= "UIAspectRatioConstraint"
 		then
 			pcall(function()
-				if
-					(v.ClassName == "Frame")
-					and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency
-						~= nil
-				then
-					Tween(
-						v,
-						{
-							BackgroundTransparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency,
-						}
-					)
+				local id = v:GetAttribute("InstanceID")
+				if not id then return end
+				local data = TransparencyValues[Interface.Name][id]
+				if not data then return end
+
+				local props = {}
+
+				if class == "Frame" and data.BackgroundTransparency ~= nil then
+					props.BackgroundTransparency = data.BackgroundTransparency
 				end
 
-				if
-					(v.ClassName == "TextLabel" or v.ClassName == "TextBox" or v.ClassName == "TextButton")
-					and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency ~= nil
-					and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].TextTransparency ~= nil
-				then
-					Tween(
-						v,
-						{
-							BackgroundTransparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency,
-						}
-					)
-					Tween(
-						v,
-						{
-							TextTransparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].TextTransparency,
-						}
-					)
+				if (class == "TextLabel" or class == "TextBox" or class == "TextButton") then
+					if data.BackgroundTransparency ~= nil then
+						props.BackgroundTransparency = data.BackgroundTransparency
+					end
+					if data.TextTransparency ~= nil then
+						props.TextTransparency = data.TextTransparency
+					end
 				end
 
-				if
-					(v.ClassName == "ImageLabel" or v.ClassName == "ImageButton")
-					and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency ~= nil
-					and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].ImageTransparency
-				then
-					Tween(
-						v,
-						{
-							BackgroundTransparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].BackgroundTransparency,
-						}
-					)
-					Tween(
-						v,
-						{
-							ImageTransparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].ImageTransparency,
-						}
-					)
+				if (class == "ImageLabel" or class == "ImageButton") then
+					if data.BackgroundTransparency ~= nil then
+						props.BackgroundTransparency = data.BackgroundTransparency
+					end
+					if data.ImageTransparency ~= nil then
+						props.ImageTransparency = data.ImageTransparency
+					end
 				end
 
-				if
-					(v.ClassName == "UIStroke" or Interface.ClassName == "UIGradient")
-					and TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].Transparency
-				then
-					Tween(
-						v,
-						{ Transparency = TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")].Transparency }
-					)
+				if (class == "UIStroke" or class == "UIGradient") and data.Transparency ~= nil then
+					props.Transparency = data.Transparency
+				end
+
+				if next(props) then
+					Tween(v, props)
 				end
 			end)
 		end
@@ -1427,83 +1387,49 @@ local function Unhide(Interface)
 
 	pcall(function()
 		if Interface.ClassName ~= "ScreenGui" then
-			if
-				(Interface.ClassName == "Frame")
-				and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency
-					~= nil
-			then
-				Tween(
-					Interface,
-					{
-						BackgroundTransparency = TransparencyValues[Interface.Name][Interface:GetAttribute(
-							"InstanceID"
-						)].BackgroundTransparency,
-					}
-				)
+			local id = Interface:GetAttribute("InstanceID")
+			if not id then return end
+			local data = TransparencyValues[Interface.Name][id]
+			if not data then return end
+
+			local class = Interface.ClassName
+			local props = {}
+
+			if class == "Frame" and data.BackgroundTransparency ~= nil then
+				props.BackgroundTransparency = data.BackgroundTransparency
 			end
 
-			if
-				(
-					Interface.ClassName == "TextLabel"
-					or Interface.ClassName == "TextBox"
-					or Interface.ClassName == "TextButton"
-				)
-				and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency ~= nil
-				and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].TextTransparency ~= nil
-			then
-				Tween(
-					Interface,
-					{
-						BackgroundTransparency = TransparencyValues[Interface.Name][Interface:GetAttribute(
-							"InstanceID"
-						)].BackgroundTransparency,
-					}
-				)
-				Tween(
-					Interface,
-					{
-						TextTransparency = TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].TextTransparency,
-					}
-				)
+			if (class == "TextLabel" or class == "TextBox" or class == "TextButton") then
+				if data.BackgroundTransparency ~= nil then
+					props.BackgroundTransparency = data.BackgroundTransparency
+				end
+				if data.TextTransparency ~= nil then
+					props.TextTransparency = data.TextTransparency
+				end
 			end
 
-			if
-				(Interface.ClassName == "ImageLabel" or Interface.ClassName == "ImageButton")
-				and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].BackgroundTransparency ~= nil
-				and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].ImageTransparency
-			then
-				Tween(
-					Interface,
-					{
-						BackgroundTransparency = TransparencyValues[Interface.Name][Interface:GetAttribute(
-							"InstanceID"
-						)].BackgroundTransparency,
-					}
-				)
-				Tween(
-					Interface,
-					{
-						ImageTransparency = TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].ImageTransparency,
-					}
-				)
+			if (class == "ImageLabel" or class == "ImageButton") then
+				if data.BackgroundTransparency ~= nil then
+					props.BackgroundTransparency = data.BackgroundTransparency
+				end
+				if data.ImageTransparency ~= nil then
+					props.ImageTransparency = data.ImageTransparency
+				end
 			end
 
-			if
-				(Interface.ClassName == "UIStroke" or Interface.ClassName == "UIGradient")
-				and TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].Transparency
-			then
-				Tween(
-					Interface,
-					{
-						Transparency = TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")].Transparency,
-					}
-				)
+			if (class == "UIStroke" or class == "UIGradient") and data.Transparency ~= nil then
+				props.Transparency = data.Transparency
+			end
+
+			if next(props) then
+				Tween(Interface, props)
 			end
 		end
 	end)
 
 	Starlight.Minimized = false
 end
+
 
 -- Maximizes the window
 local function Maximize(Window: Frame)
