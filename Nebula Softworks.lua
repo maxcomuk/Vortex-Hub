@@ -1179,150 +1179,62 @@ local oldSizeX, oldSizeY, oldPosX, oldPosY
 -- Hides the given object
 local function Hide(Interface, JustHide: boolean?, Notify: boolean?, Bind: string?)
 	JustHide = JustHide or false
-
 	TransparencyValues[Interface.Name] = TransparencyValues[Interface.Name] or {}
 	table.clear(TransparencyValues[Interface.Name])
 
-	for _, v in pairs(Interface:GetDescendants()) do
-		local class = v.ClassName
-		if
-			class ~= "Folder"
-			and class ~= "UICorner"
-			and class ~= "StringValue"
-			and class ~= "Color3Value"
-			and class ~= "UIListLayout"
-			and class ~= "UITextSizeConstraint"
-			and class ~= "UIPadding"
-			and class ~= "UIPageLayout"
-			and class ~= "UISizeConstraint"
-			and class ~= "UIAspectRatioConstraint"
-		then
-			if JustHide == false then
-				v:SetAttribute("InstanceID", HttpService:GenerateGUID(false))
-				local id = v:GetAttribute("InstanceID")
-				TransparencyValues[Interface.Name][id] = {}
-
-				if class == "Frame" then
-					TransparencyValues[Interface.Name][id].BackgroundTransparency = v.BackgroundTransparency
-				end
-
-				if class == "TextLabel" or class == "TextBox" or class == "TextButton" then
-					TransparencyValues[Interface.Name][id].BackgroundTransparency = v.BackgroundTransparency
-					TransparencyValues[Interface.Name][id].TextTransparency = v.TextTransparency
-				end
-
-				if class == "ImageLabel" or class == "ImageButton" then
-					TransparencyValues[Interface.Name][id].BackgroundTransparency = v.BackgroundTransparency
-					TransparencyValues[Interface.Name][id].ImageTransparency = v.ImageTransparency
-				end
-
-				if class == "UIStroke" or class == "UIGradient" then
-					TransparencyValues[Interface.Name][id].Transparency = v.Transparency
-				end
-			end
-
-			local props = {}
-			if class == "Frame" then
-				props.BackgroundTransparency = 1
-			end
-
-			if class == "TextLabel" or class == "TextBox" or class == "TextButton" then
-				props.BackgroundTransparency = 1
-				props.TextTransparency = 1
-			end
-
-			if class == "ImageLabel" or class == "ImageButton" then
-				props.BackgroundTransparency = 1
-				props.ImageTransparency = 1
-			end
-
-			if class == "UIStroke" or class == "UIGradient" then
-				props.Transparency = 1
-			end
-
-			if next(props) then
-				Tween(v, props)
+	-- Only store transparency info if needed (you said keep this)
+	if not JustHide then
+		for _, v in pairs(Interface:GetDescendants()) do
+			local class = v.ClassName
+			if class ~= "Folder" 
+				and class ~= "UICorner" 
+				and class ~= "StringValue"
+				and class ~= "Color3Value" 
+				and class ~= "UIListLayout" 
+				and class ~= "UITextSizeConstraint" 
+				and class ~= "UIPadding"
+				and class ~= "UIPageLayout"
+				and class ~= "UISizeConstraint"
+				and class ~= "UIAspectRatioConstraint" then
+				
+				v:SetAttribute("InstanceID", v:GetAttribute("InstanceID") or HttpService:GenerateGUID(false))
+				TransparencyValues[Interface.Name][v:GetAttribute("InstanceID")] = {}
 			end
 		end
+
+		-- Cache main interface too
+		Interface:SetAttribute("InstanceID", Interface:GetAttribute("InstanceID") or HttpService:GenerateGUID(false))
+		TransparencyValues[Interface.Name][Interface:GetAttribute("InstanceID")] = {}
 	end
 
-	if Interface.ClassName ~= "ScreenGui" then
-		if JustHide == false then
-			Interface:SetAttribute("InstanceID", HttpService:GenerateGUID(false))
-			local id = Interface:GetAttribute("InstanceID")
-			TransparencyValues[Interface.Name][id] = {}
-
-			if Interface.ClassName == "Frame" then
-				TransparencyValues[Interface.Name][id].BackgroundTransparency = Interface.BackgroundTransparency
-			end
-
-			if Interface.ClassName == "TextLabel" or Interface.ClassName == "TextBox" or Interface.ClassName == "TextButton" then
-				TransparencyValues[Interface.Name][id].BackgroundTransparency = Interface.BackgroundTransparency
-				TransparencyValues[Interface.Name][id].TextTransparency = Interface.TextTransparency
-			end
-
-			if Interface.ClassName == "ImageLabel" or Interface.ClassName == "ImageButton" then
-				TransparencyValues[Interface.Name][id].BackgroundTransparency = Interface.BackgroundTransparency
-				TransparencyValues[Interface.Name][id].ImageTransparency = Interface.ImageTransparency
-			end
-
-			if Interface.ClassName == "UIStroke" or Interface.ClassName == "UIGradient" then
-				TransparencyValues[Interface.Name][id].Transparency = Interface.Transparency
-			end
-		end
-
-		local iprops = {}
-		if Interface.ClassName == "Frame" then
-			iprops.BackgroundTransparency = 1
-		end
-
-		if Interface.ClassName == "TextLabel" or Interface.ClassName == "TextBox" or Interface.ClassName == "TextButton" then
-			iprops.BackgroundTransparency = 1
-			iprops.TextTransparency = 1
-		end
-
-		if Interface.ClassName == "ImageLabel" or Interface.ClassName == "ImageButton" then
-			iprops.BackgroundTransparency = 1
-			iprops.ImageTransparency = 1
-		end
-
-		if Interface.ClassName == "UIStroke" or Interface.ClassName == "UIGradient" then
-			iprops.Transparency = 1
-		end
-
-		if next(iprops) then
-			Tween(Interface, iprops)
-		end
-	end
-
-	task.wait(0.18)
+	-- Instantly hide
 	if Interface.ClassName == "ScreenGui" then
 		Interface.Enabled = false
 	else
 		Interface.Visible = false
 	end
 
+	-- Optional notification
 	if Notify then
+		local message
 		if Starlight.Instance.MobileToggle.Visible then
-			Starlight:Notification({
-				Title = "Interface Hidden",
-				Icon = 87575513726659,
-				Content = "The Interface Has Been Hidden. You May Reopen It By Pressing The Small Icon Button. ",
-				Duration = 2,
-			})
+			message = "The Interface has been hidden. You may reopen it by pressing the small icon button."
 		else
-			Starlight:Notification({
-				Title = "Interface Hidden",
-				Icon = 87575513726659,
-				Content = "The Interface Has Been Hidden. You May Reopen It By Pressing The " .. Bind .. " Key.  ",
-				Duration = 2,
-			})
+			message = "The Interface has been hidden. You may reopen it by pressing the " .. Bind .. " key."
 		end
+
+		Starlight:Notification({
+			Title = "Interface Hidden",
+			Icon = 87575513726659,
+			Content = message,
+			Duration = 2,
+		})
 	end
 
 	Starlight.Minimized = true
 end
 
+-- Unhides the given object which has been hidden by hide
 local function Unhide(Interface)
 	if Interface.ClassName == "ScreenGui" then
 		Interface.Enabled = true
@@ -1330,106 +1242,8 @@ local function Unhide(Interface)
 		Interface.Visible = true
 	end
 
-	for _, v in pairs(Interface:GetDescendants()) do
-		local class = v.ClassName
-		if
-			class ~= "Folder"
-			and class ~= "UICorner"
-			and class ~= "StringValue"
-			and class ~= "Color3Value"
-			and class ~= "UIListLayout"
-			and class ~= "UITextSizeConstraint"
-			and class ~= "UIPadding"
-			and class ~= "UIPageLayout"
-			and class ~= "UISizeConstraint"
-			and class ~= "UIAspectRatioConstraint"
-		then
-			pcall(function()
-				local id = v:GetAttribute("InstanceID")
-				if not id then return end
-				local data = TransparencyValues[Interface.Name][id]
-				if not data then return end
-
-				local props = {}
-
-				if class == "Frame" and data.BackgroundTransparency ~= nil then
-					props.BackgroundTransparency = data.BackgroundTransparency
-				end
-
-				if (class == "TextLabel" or class == "TextBox" or class == "TextButton") then
-					if data.BackgroundTransparency ~= nil then
-						props.BackgroundTransparency = data.BackgroundTransparency
-					end
-					if data.TextTransparency ~= nil then
-						props.TextTransparency = data.TextTransparency
-					end
-				end
-
-				if (class == "ImageLabel" or class == "ImageButton") then
-					if data.BackgroundTransparency ~= nil then
-						props.BackgroundTransparency = data.BackgroundTransparency
-					end
-					if data.ImageTransparency ~= nil then
-						props.ImageTransparency = data.ImageTransparency
-					end
-				end
-
-				if (class == "UIStroke" or class == "UIGradient") and data.Transparency ~= nil then
-					props.Transparency = data.Transparency
-				end
-
-				if next(props) then
-					Tween(v, props)
-				end
-			end)
-		end
-	end
-
-	pcall(function()
-		if Interface.ClassName ~= "ScreenGui" then
-			local id = Interface:GetAttribute("InstanceID")
-			if not id then return end
-			local data = TransparencyValues[Interface.Name][id]
-			if not data then return end
-
-			local class = Interface.ClassName
-			local props = {}
-
-			if class == "Frame" and data.BackgroundTransparency ~= nil then
-				props.BackgroundTransparency = data.BackgroundTransparency
-			end
-
-			if (class == "TextLabel" or class == "TextBox" or class == "TextButton") then
-				if data.BackgroundTransparency ~= nil then
-					props.BackgroundTransparency = data.BackgroundTransparency
-				end
-				if data.TextTransparency ~= nil then
-					props.TextTransparency = data.TextTransparency
-				end
-			end
-
-			if (class == "ImageLabel" or class == "ImageButton") then
-				if data.BackgroundTransparency ~= nil then
-					props.BackgroundTransparency = data.BackgroundTransparency
-				end
-				if data.ImageTransparency ~= nil then
-					props.ImageTransparency = data.ImageTransparency
-				end
-			end
-
-			if (class == "UIStroke" or class == "UIGradient") and data.Transparency ~= nil then
-				props.Transparency = data.Transparency
-			end
-
-			if next(props) then
-				Tween(Interface, props)
-			end
-		end
-	end)
-
 	Starlight.Minimized = false
 end
-
 
 -- Maximizes the window
 local function Maximize(Window: Frame)
