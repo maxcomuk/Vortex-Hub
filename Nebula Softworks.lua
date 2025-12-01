@@ -1184,59 +1184,79 @@ local function Hide(Interface, JustHide: boolean?, Notify: boolean?, Bind: strin
 	TransparencyValues[Interface.Name] = TransparencyValues[Interface.Name] or {}
 	table.clear(TransparencyValues[Interface.Name])
 
-	local function storeTransparency(v)
-		local id = v:GetAttribute("InstanceID") or HttpService:GenerateGUID(false)
-		v:SetAttribute("InstanceID", id)
-
-		TransparencyValues[Interface.Name][id] = {}
-
-		if v.ClassName == "Frame" then
-			TransparencyValues[Interface.Name][id].BackgroundTransparency = v.BackgroundTransparency
-		elseif v.ClassName == "TextLabel" or v.ClassName == "TextBox" or v.ClassName == "TextButton" then
-			TransparencyValues[Interface.Name][id].BackgroundTransparency = v.BackgroundTransparency
-			TransparencyValues[Interface.Name][id].TextTransparency = v.TextTransparency
-		elseif v.ClassName == "ImageLabel" or v.ClassName == "ImageButton" then
-			TransparencyValues[Interface.Name][id].BackgroundTransparency = v.BackgroundTransparency
-			TransparencyValues[Interface.Name][id].ImageTransparency = v.ImageTransparency
-		elseif v.ClassName == "UIStroke" or v.ClassName == "UIGradient" then
-			TransparencyValues[Interface.Name][id].Transparency = v.Transparency
-		end
-	end
-
-	local function hideUIElement(v)
-		if v.ClassName == "Frame" then
-			Tween(v, { BackgroundTransparency = 1 })
-		elseif v.ClassName == "TextLabel" or v.ClassName == "TextBox" or v.ClassName == "TextButton" then
-			Tween(v, { BackgroundTransparency = 1 })
-			Tween(v, { TextTransparency = 1 })
-		elseif v.ClassName == "ImageLabel" or v.ClassName == "ImageButton" then
-			Tween(v, { BackgroundTransparency = 1 })
-			Tween(v, { ImageTransparency = 1 })
-		elseif v.ClassName == "UIStroke" or v.ClassName == "UIGradient" then
-			Tween(v, { Transparency = 1 })
-		end
-	end
-
 	for i, v in pairs(Interface:GetDescendants()) do
 		if not (v.ClassName == "Folder" or v.ClassName == "UICorner" or v.ClassName == "StringValue" or
-				v.ClassName == "Color3Value" or v.ClassName == "UIListLayout" or v.ClassName == "UITextSizeConstraint" or
-				v.ClassName == "UIPadding" or v.ClassName == "UIPageLayout" or v.ClassName == "UISizeConstraint" or
-				v.ClassName == "UIAspectRatioConstraint") then
+			v.ClassName == "Color3Value" or v.ClassName == "UIListLayout" or v.ClassName == "UITextSizeConstraint" or
+			v.ClassName == "UIPadding" or v.ClassName == "UIPageLayout" or v.ClassName == "UISizeConstraint" or
+			v.ClassName == "UIAspectRatioConstraint") then
 
+			-- Create And Set Subtables
 			if JustHide == false then
-				storeTransparency(v)
+				local instanceID = v:GetAttribute("InstanceID") or HttpService:GenerateGUID(false)
+				v:SetAttribute("InstanceID", instanceID)
+
+				TransparencyValues[Interface.Name][instanceID] = {}
+
+				if v.ClassName == "Frame" then
+					TransparencyValues[Interface.Name][instanceID].BackgroundTransparency = v.BackgroundTransparency
+				elseif v.ClassName == "TextLabel" or v.ClassName == "TextBox" or v.ClassName == "TextButton" then
+					TransparencyValues[Interface.Name][instanceID].BackgroundTransparency = v.BackgroundTransparency
+					TransparencyValues[Interface.Name][instanceID].TextTransparency = v.TextTransparency
+				elseif v.ClassName == "ImageLabel" or v.ClassName == "ImageButton" then
+					TransparencyValues[Interface.Name][instanceID].BackgroundTransparency = v.BackgroundTransparency
+					TransparencyValues[Interface.Name][instanceID].ImageTransparency = v.ImageTransparency
+				elseif v.ClassName == "UIStroke" or v.ClassName == "UIGradient" then
+					TransparencyValues[Interface.Name][instanceID].Transparency = v.Transparency
+				end
 			end
 
-			hideUIElement(v)
+			-- Actually Hide The Stuff
+			if v.ClassName == "Frame" then
+				Tween(v, { BackgroundTransparency = 1 })
+			elseif v.ClassName == "TextLabel" or v.ClassName == "TextBox" or v.ClassName == "TextButton" then
+				Tween(v, { BackgroundTransparency = 1 })
+				Tween(v, { TextTransparency = 1 })
+			elseif v.ClassName == "ImageLabel" or v.ClassName == "ImageButton" then
+				Tween(v, { BackgroundTransparency = 1 })
+				Tween(v, { ImageTransparency = 1 })
+			elseif v.ClassName == "UIStroke" or v.ClassName == "UIGradient" then
+				Tween(v, { Transparency = 1 })
+			end
 		end
 	end
 
 	if Interface.ClassName ~= "ScreenGui" then
 		if JustHide == false then
-			storeTransparency(Interface)
+			local instanceID = Interface:GetAttribute("InstanceID") or HttpService:GenerateGUID(false)
+			Interface:SetAttribute("InstanceID", instanceID)
+
+			TransparencyValues[Interface.Name][instanceID] = {}
+
+			if Interface.ClassName == "Frame" then
+				TransparencyValues[Interface.Name][instanceID].BackgroundTransparency = Interface.BackgroundTransparency
+			elseif Interface.ClassName == "TextLabel" or Interface.ClassName == "TextBox" or Interface.ClassName == "TextButton" then
+				TransparencyValues[Interface.Name][instanceID].BackgroundTransparency = Interface.BackgroundTransparency
+				TransparencyValues[Interface.Name][instanceID].TextTransparency = Interface.TextTransparency
+			elseif Interface.ClassName == "ImageLabel" or Interface.ClassName == "ImageButton" then
+				TransparencyValues[Interface.Name][instanceID].BackgroundTransparency = Interface.BackgroundTransparency
+				TransparencyValues[Interface.Name][instanceID].ImageTransparency = Interface.ImageTransparency
+			elseif Interface.ClassName == "UIStroke" or Interface.ClassName == "UIGradient" then
+				TransparencyValues[Interface.Name][instanceID].Transparency = Interface.Transparency
+			end
 		end
 
-		hideUIElement(Interface)
+		-- Actually Hide The Stuff
+		if Interface.ClassName == "Frame" then
+			Tween(Interface, { BackgroundTransparency = 1 })
+		elseif Interface.ClassName == "TextLabel" or Interface.ClassName == "TextBox" or Interface.ClassName == "TextButton" then
+			Tween(Interface, { BackgroundTransparency = 1 })
+			Tween(Interface, { TextTransparency = 1 })
+		elseif Interface.ClassName == "ImageLabel" or Interface.ClassName == "ImageButton" then
+			Tween(Interface, { BackgroundTransparency = 1 })
+			Tween(Interface, { ImageTransparency = 1 })
+		elseif Interface.ClassName == "UIStroke" or Interface.ClassName == "UIGradient" then
+			Tween(Interface, { Transparency = 1 })
+		end
 	end
 
 	task.wait(0.18)
@@ -1247,18 +1267,21 @@ local function Hide(Interface, JustHide: boolean?, Notify: boolean?, Bind: strin
 	end
 
 	if Notify then
-		local message = "The Interface Has Been Hidden. You May Reopen It By Pressing The "
 		if Starlight.Instance.MobileToggle.Visible then
-			message = message .. "Small Icon Button."
+			Starlight:Notification({
+				Title = "Interface Hidden",
+				Icon = 87575513726659,
+				Content = "The Interface Has Been Hidden. You May Reopen It By Pressing The Small Icon Button. ",
+				Duration = 2,
+			})
 		else
-			message = message .. Bind .. " Key."
+			Starlight:Notification({
+				Title = "Interface Hidden",
+				Icon = 87575513726659,
+				Content = "The Interface Has Been Hidden. You May Reopen It By Pressing The " .. Bind .. " Key.  ",
+				Duration = 2,
+			})
 		end
-		Starlight:Notification({
-			Title = "Interface Hidden",
-			Icon = 87575513726659,
-			Content = message,
-			Duration = 2,
-		})
 	end
 
 	Starlight.Minimized = true
@@ -1272,49 +1295,69 @@ local function Unhide(Interface)
 		Interface.Visible = true
 	end
 
-	local function applyTransparency(v)
-		local id = v:GetAttribute("InstanceID")
-		if not id then return end
-
-		local transValues = TransparencyValues[Interface.Name][id]
-		if not transValues then return end
-
-		if v.ClassName == "Frame" and transValues.BackgroundTransparency then
-			Tween(v, { BackgroundTransparency = transValues.BackgroundTransparency })
-		elseif (v.ClassName == "TextLabel" or v.ClassName == "TextBox" or v.ClassName == "TextButton") then
-			if transValues.BackgroundTransparency and transValues.TextTransparency then
-				Tween(v, { BackgroundTransparency = transValues.BackgroundTransparency })
-				Tween(v, { TextTransparency = transValues.TextTransparency })
-			end
-		elseif (v.ClassName == "ImageLabel" or v.ClassName == "ImageButton") then
-			if transValues.BackgroundTransparency and transValues.ImageTransparency then
-				Tween(v, { BackgroundTransparency = transValues.BackgroundTransparency })
-				Tween(v, { ImageTransparency = transValues.ImageTransparency })
-			end
-		elseif (v.ClassName == "UIStroke" or v.ClassName == "UIGradient") then
-			if transValues.Transparency then
-				Tween(v, { Transparency = transValues.Transparency })
-			end
-		end
-	end
-
-	for _, v in pairs(Interface:GetDescendants()) do
+	for i, v in pairs(Interface:GetDescendants()) do
 		if not (v.ClassName == "Folder" or v.ClassName == "UICorner" or v.ClassName == "StringValue" or
-				v.ClassName == "Color3Value" or v.ClassName == "UIListLayout" or v.ClassName == "UITextSizeConstraint" or
-				v.ClassName == "UIPadding" or v.ClassName == "UIPageLayout" or v.ClassName == "UISizeConstraint" or
-				v.ClassName == "UIAspectRatioConstraint") then
-			pcall(function() applyTransparency(v) end)
+			v.ClassName == "Color3Value" or v.ClassName == "UIListLayout" or v.ClassName == "UITextSizeConstraint" or
+			v.ClassName == "UIPadding" or v.ClassName == "UIPageLayout" or v.ClassName == "UISizeConstraint" or
+			v.ClassName == "UIAspectRatioConstraint") then
+
+			pcall(function()
+				local id = v:GetAttribute("InstanceID")
+				if id and TransparencyValues[Interface.Name][id] then
+					local transValues = TransparencyValues[Interface.Name][id]
+
+					if v.ClassName == "Frame" and transValues.BackgroundTransparency then
+						Tween(v, { BackgroundTransparency = transValues.BackgroundTransparency })
+					elseif (v.ClassName == "TextLabel" or v.ClassName == "TextBox" or v.ClassName == "TextButton") then
+						if transValues.BackgroundTransparency and transValues.TextTransparency then
+							Tween(v, { BackgroundTransparency = transValues.BackgroundTransparency })
+							Tween(v, { TextTransparency = transValues.TextTransparency })
+						end
+					elseif (v.ClassName == "ImageLabel" or v.ClassName == "ImageButton") then
+						if transValues.BackgroundTransparency and transValues.ImageTransparency then
+							Tween(v, { BackgroundTransparency = transValues.BackgroundTransparency })
+							Tween(v, { ImageTransparency = transValues.ImageTransparency })
+						end
+					elseif (v.ClassName == "UIStroke" or v.ClassName == "UIGradient") then
+						if transValues.Transparency then
+							Tween(v, { Transparency = transValues.Transparency })
+						end
+					end
+				end
+			end)
 		end
 	end
 
 	pcall(function()
 		if Interface.ClassName ~= "ScreenGui" then
-			applyTransparency(Interface)
+			local id = Interface:GetAttribute("InstanceID")
+			if id and TransparencyValues[Interface.Name][id] then
+				local transValues = TransparencyValues[Interface.Name][id]
+
+				if Interface.ClassName == "Frame" and transValues.BackgroundTransparency then
+					Tween(Interface, { BackgroundTransparency = transValues.BackgroundTransparency })
+				elseif (Interface.ClassName == "TextLabel" or Interface.ClassName == "TextBox" or Interface.ClassName == "TextButton") then
+					if transValues.BackgroundTransparency and transValues.TextTransparency then
+						Tween(Interface, { BackgroundTransparency = transValues.BackgroundTransparency })
+						Tween(Interface, { TextTransparency = transValues.TextTransparency })
+					end
+				elseif (Interface.ClassName == "ImageLabel" or Interface.ClassName == "ImageButton") then
+					if transValues.BackgroundTransparency and transValues.ImageTransparency then
+						Tween(Interface, { BackgroundTransparency = transValues.BackgroundTransparency })
+						Tween(Interface, { ImageTransparency = transValues.ImageTransparency })
+					end
+				elseif (Interface.ClassName == "UIStroke" or Interface.ClassName == "UIGradient") then
+					if transValues.Transparency then
+						Tween(Interface, { Transparency = transValues.Transparency })
+					end
+				end
+			end
 		end
 	end)
 
 	Starlight.Minimized = false
 end
+
 
 -- Maximizes the window
 local function Maximize(Window: Frame)
