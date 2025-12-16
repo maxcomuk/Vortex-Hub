@@ -1,11 +1,79 @@
+--[[
+
+███████╗████████╗ █████╗ ██████╗ ██╗     ██╗ ██████╗ ██╗  ██╗████████╗    ██╗███╗   ██╗████████╗███████╗██████╗ ███████╗ █████╗  ██████╗███████╗    ███████╗██╗   ██╗██╗████████╗███████╗
+██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║     ██║██╔════╝ ██║  ██║╚══██╔══╝    ██║████╗  ██║╚══██╔══╝██╔════╝██╔══██╗██╔════╝██╔══██╗██╔════╝██╔════╝    ██╔════╝██║   ██║██║╚══██╔══╝██╔════╝
+███████╗   ██║   ███████║██████╔╝██║     ██║██║  ███╗███████║   ██║       ██║██╔██╗ ██║   ██║   ██████╗ ██████╔╝█████╗  ███████║██║     ██████╗     ███████╗██║   ██║██║   ██║   ██████╗  
+╚════██║   ██║   ██╔══██║██╔══██╗██║     ██║██║   ██║██╔══██║   ██║       ██║██║╚██╗██║   ██║   ██╔═══╝ ██╔══██╗██╔══╝  ██╔══██║██║     ██╔═══╝     ╚════██║██║   ██║██║   ██║   ██╔═══╝  
+███████║   ██║   ██║  ██║██║  ██║███████╗██║╚██████╔╝██║  ██║   ██║       ██║██║ ╚████║   ██║   ███████╗██║  ██║██║     ██║  ██║╚██████╗███████╗    ███████║╚██████╔╝██║   ██║   ███████╗
+╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝       ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝ ╚═════╝╚══════╝    ╚══════╝ ╚═════╝ ╚═╝   ╚═╝   ╚══════╝
+by    d8b   db d88888b d8888b. db    db db       .d8b.       .d8888.  .d88b.  d88888b d888888b db   d8b   db  .d88b.  d8888b. db   dD .d8888. 
+      888o  88 88'     88  `8D 88    88 88      d8' `8b      88'  YP .8P  Y8. 88'     `~~88~~' 88   I8I   88 .8P  Y8. 88  `8D 88 ,8P' 88'  YP 
+      88V8o 88 88ooooo 88oooY' 88    88 88      88ooo88      `8bo.   88    88 88ooo      88    88   I8I   88 88    88 88oobY' 88,8P   `8bo.   
+      88 V8o88 88~~~~~ 88~~~b. 88    88 88      88~~~88        `Y8b. 88    88 88~~~      88    Y8   I8I   88 88    88 88`8b   88`8b     `Y8b. 
+      88  V888 88.     88   8D 88b  d88 88booo. 88   88      db   8D `8b  d8' 88         88    `8b d8'8b d8' `8b  d8' 88 `88. 88 `88. db   8D 
+      VP   V8P Y88888P Y8888P' ~Y8888P' Y88888P YP   YP      `8888Y'  `Y88P'  YP         YP     `8b8' `8d8'   `Y88P'  88   YD YP   YD `8888Y' 
+                                                                                                                                        
+                                                                                                                                        
+
+Main Credits
+
+Hunter (Nebula Softworks) | Designing And Programming | Main Developer
+JustHey (Nebula Softworks) | Configurations, Programming, Bug Fixing | Co Developer
+Pookie Pepelss (Nebula Softworks) | Bug And Feature Testing | Lead Tester
+Inori | Configuration and Layout Concept  
+
+
+Extra Credits
+
+Sirius | Build Warnings
+Deity/dp4pv/x64x70/btg/j24 | Certain Scripting and Testing 
+The Nebula Softworks Community | Bug Testers And Suggestions For The Project
+
+
+NOTES:
+Starlight is a custom interface suite built from the ground up, meaning scripted and designed from scratch unlike Luna. If any other UIs look like Starlight,
+It is pure coincidence (Coming back after writing this, allusive looks like starlight a hella ton, and i didnt even know that lib existed :sob: so yea). 
+If you see our logo used anywhere else, please report it to us as I made this logo from scratch and i cannot fucking tolerate other shit
+stealing my logos and claiming it as their own, like bloody hell cryptic stole Luna's logo and called it their own, fk you reaper. Besides the credits provided, everything
+else was scripted by Me and JustHey from SCRATCH, meaning our brains only and no online references with a minor exception of Luna's Original Code.
+The nature of Starlight is a GUI Model based library (and not drawing), meaning the interface is designed in studio as a Roblox game asset, before being published to roblox
+and coded via a script. Sirius' Rayfield uses this too, BUT ITS NOT A COPY. Im putting this here because Luna did this as well and while alot of parts were taken from
+Rayfield so I could tolerate some of that bs, this was not and I am not tolerating that skidding bs. I dont get how using the same type of library nature is considered skidding.
+It Just Happens to be the same. If you're wondering why the model's interface is called Starlight V2, its because i was working on a previous discontinued UI library project in the past and
+it was also called Starlight. Some members of the Nebula Softworks Community should know about that, and it was discontinued due to my lack of motivation
+and the fact the design was way too complicated to script as a UI library with reusable components. (it was based on apple settings)
+
+For those intending to read the source through, I sincerely apologise for some of the parts which are extremely unorganised/weird/hard to understand.
+Main example is the way returning for elements function. Like wtf? Starlight.Window.TabSections[Name].Tabs[TabIndex].Groupboxes[GroupIndex].Elements[Index].NestedElements[NestedIndex] = NestedElement ??!!?!?!
+For that instance, it is so we can return everything in a whole table, with everything accessible and linked back to the main library table (and to make accessible outside of creation).
+However, once again I apologise. I have added the meanings of some unorthodox/stylised comments below.
+I kind of gave up/forgot to comment within the Elements too, so another apology :sob:
+ 
+
+COMMENT MEANINGS:
+A Section is something used to easily identify what a section of code is used for/means
+Subsections help to oraganize within subsections, and are smaller, breaking down the code even more
+
+Asterisks in Table Examples mean that the parameter is not required
+However, if there are 4 asterisks, it means that requirement of the parameter depends on another parameter
+Ellipsis means that unlimited parameters of the template provided are accepted within the table
+
+If you see --!nocheck and a few nil variables above before this, that is for the studio environment. It js means I forgot to remove them before publishing the release.
+
+
+Starlight Interface Suite
+by Nebula Softworks
+
+]]
+
 --// SECTION : Core Variables
 
-local Release = "Prerelease Beta 5.01a"
+local Release = "Prerelease Beta 5.03c"
 local debugV = false
 
 local Starlight = {
 
-	InterfaceBuild = "B5B4",
+	InterfaceBuild = "B5B9",
 
 	WindowKeybind = "K",
 
@@ -40,16 +108,20 @@ end
 local Lighting = GetService("Lighting")
 local Players = GetService("Players")
 local Teams = GetService("Teams")
+local StatsService = GetService("Stats")
 local RunService = GetService("RunService")
 local UserInputService = GetService("UserInputService")
 local TweenService = GetService("TweenService")
 local HttpService = GetService("HttpService")
 local Localization = GetService("LocalizationService")
 local CollectionService = GetService("CollectionService")
+local TeleportService = GetService("TeleportService")
 local TextService = GetService("TextService")
 local GuiService = GetService("GuiService")
+local MarketplaceService = GetService("MarketplaceService")
 local ReplicatedStorage = GetService("ReplicatedStorage")
 local ContentProvider = GetService("ContentProvider")
+local InputManager = GetService("VirtualInputManager")
 local CoreGui = GetService("CoreGui")
 
 local Player = Players.LocalPlayer
@@ -67,16 +139,22 @@ local notificationAcrylicEvent = Instance.new("BindableEvent")
 local acrylicFlag = false -- I do logic like this cus im scared weird and/or conditions fuck up as true may be behind or sm
 if getgenv then
 	if getgenv().NoAnticheat == nil or getgenv().NoAnticheat == true then
-		flag = true
+		acrylicFlag = true
 	end
 	if getgenv().SecureMode then
-		flag = false
+		acrylicFlag = false
 	end
 else
 	if RunService:IsStudio() then
-		flag = true
+		acrylicFlag = true
 	end
 end
+
+local isStudio = RunService:IsStudio() or false
+local website = "nebulasoftworks.xyz/starlight"
+local Acrylic = isStudio and require(ReplicatedStorage.AcrylicBundled)
+	or loadstring(game:HttpGet("https://raw." .. website .. "/AcrylicModule.luau"))()
+Acrylic.Init()
 
 local Request = (syn and syn.request)
 	or (fluxus and fluxus.request)
@@ -823,7 +901,7 @@ local ConfigMethods = {
 local ThemeMethods = {
 	bindTheme = function(object: GuiObject, property, themeKey)
 		local function set()
-			pcall(task.defer, function()
+			pcall(task.spawn, function()
 				if
 					object.ClassName == "UIGradient"
 					and typeof(GetNestedValue(Starlight.CurrentTheme, themeKey)) == "Color3"
@@ -1619,7 +1697,7 @@ StarlightUI:WaitForChild("Drag").Position = UDim2.new(
 	0,
 	0,
 	((Camera.ViewportSize.Y / 2 - GuiInset) - StarlightUI.MainWindow.Size.Y.Offset / 2)
-		- (GuiInset / 2)
+	- (GuiInset / 2)
 		+ StarlightUI.MainWindow.Size.Y.Offset
 		+ 10
 )
@@ -1648,7 +1726,7 @@ local GUICanvasSize = { X = Camera.ViewportSize.X, Y = Camera.ViewportSize.Y - G
 
 --// ENDSUBSECTION
 
-if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
+if UserInputService.TouchEnabled then
 	StarlightUI.Notifications.Interactable = false
 end
 
@@ -2029,6 +2107,33 @@ function Starlight:CreateWindow(WindowSettings)
 	]]
 	--
 
+	if
+		not correctBuild
+		and not warned
+		and (WindowSettings.BuildWarnings == nil and true or WindowSettings.BuildWarnings)
+	then
+		warned = true
+		warn("Starlight | Build Mismatch")
+		warn(
+			"Starlight may run into issues as it seems you are running an incompatible interface version ("
+				.. (StarlightUI.Resources:FindFirstChild("Build") and StarlightUI.Resources:FindFirstChild("Build").Value or "No Build")
+				.. "). of Starlight\n\nThis version of Starlight is intended for interface build "
+				.. Starlight.InterfaceBuild
+				.. ".\nTry rerunning the script. If the issue persists, join our discord for support."
+		)
+		pcall(function()
+			Starlight:Notification({
+				Title = "Starlight - Build Mistmatch",
+				Content = "Starlight may run into issues as it seems you are running an incompatible interface version ("
+					.. (StarlightUI.Resources:FindFirstChild("Build") and StarlightUI.Resources:FindFirstChild("Build").Value or "No Build")
+					.. "). of Starlight\n\nThis version of Starlight is intended for interface build "
+					.. Starlight.InterfaceBuild
+					.. ". \nTry rerunning the script. If the issue persists, join our discord for support.",
+				Icon = 129398364168201,
+			})
+		end)
+	end
+
 	WindowSettings.FileSettings = WindowSettings.FileSettings or {}
 	local hasOld = WindowSettings.ConfigurationSettings ~= nil
 	if WindowSettings.FileSettings.RootFolder == nil and hasOld then
@@ -2152,7 +2257,7 @@ function Starlight:CreateWindow(WindowSettings)
 			0,
 			0,
 			((Camera.ViewportSize.Y / 2 - GuiInset) - StarlightUI.MainWindow.Size.Y.Offset / 2)
-				- (GuiInset / 2)
+			- (GuiInset / 2)
 				+ mainWindow.Size.Y.Offset
 				+ 10
 		)
@@ -2275,12 +2380,12 @@ function Starlight:CreateWindow(WindowSettings)
 			)
 		end
 
-		task.defer(function()
+		task.spawn(function()
 			if WindowSettings.LoadingEnabled then
 				mainWindow.Visible = true
 				StarlightUI.Drag.Visible = true
 				StarlightUI.MobileToggle.Visible = UserInputService.TouchEnabled
-					and not UserInputService.KeyboardEnabled
+					--and not UserInputService.KeyboardEnabled
 
 				local main = mainWindow["New Loading Screen"]
 				local shadows = main.shadows
@@ -2305,7 +2410,7 @@ function Starlight:CreateWindow(WindowSettings)
 					0,
 					0,
 					((Camera.ViewportSize.Y / 2 - GuiInset) - StarlightUI.MainWindow.Size.Y.Offset / 2)
-						- (GuiInset / 2)
+					- (GuiInset / 2)
 						+ mainWindow.Size.Y.Offset
 						+ 10
 				)
@@ -2370,7 +2475,7 @@ function Starlight:CreateWindow(WindowSettings)
 				task.wait(1.72)
 
 				subtitle.Text = WindowSettings.LoadingSettings
-						and (WindowSettings.LoadingSettings.Subtitle or WindowSettings.LoadingSettings.Title)
+					and (WindowSettings.LoadingSettings.Subtitle or WindowSettings.LoadingSettings.Title)
 					or "Welcome To Starlight!"
 				Tween(title, { TextTransparency = 1 }, nil, Tween.Info("Quint", "InOut", 0.2))
 				Tween(title.playerName, { Position = UDim2.new(0, -8, 0, 0) }, nil, Tween.Info("Quint", "InOut", 0.85))
@@ -2397,7 +2502,7 @@ function Starlight:CreateWindow(WindowSettings)
 						0,
 						0,
 						((Camera.ViewportSize.Y / 2 - GuiInset) - size.Y.Offset / 2)
-							- (GuiInset / 2)
+						- (GuiInset / 2)
 							+ size.Y.Offset
 							+ 10
 					),
@@ -2456,7 +2561,7 @@ function Starlight:CreateWindow(WindowSettings)
 
 			mainWindow.Visible = true
 			StarlightUI.Drag.Visible = true
-			StarlightUI.MobileToggle.Visible = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+			StarlightUI.MobileToggle.Visible = UserInputService.TouchEnabled
 		end)
 
 		makeDraggable(mainWindow.Content.Topbar, mainWindow, StarlightUI.Drag)
@@ -2574,7 +2679,7 @@ function Starlight:CreateWindow(WindowSettings)
 			Modal.Instance.Holder.Header.TextLabel.Position = UDim2.fromOffset(36, 0)
 		end
 		Modal.Instance.Holder.Header.Icon.Image = not String.IsEmptyOrNull(Modal.Values.Icon)
-				and "rbxassetid://" .. Modal.Values.Icon
+			and "rbxassetid://" .. Modal.Values.Icon
 			or ""
 		Modal.Instance.Holder.Content.TextLabel.Text = Modal.Values.Content
 
@@ -2601,7 +2706,7 @@ function Starlight:CreateWindow(WindowSettings)
 
 				ActionButton.Parent = Modal.Instance.Holder.Actions
 				ActionButton.Header.Icon.Image = not String.IsEmptyOrNull(Action.Icon)
-						and "rbxassetid://" .. Action.Icon
+					and "rbxassetid://" .. Action.Icon
 					or ""
 				ActionButton.Header.Icon.Visible = not String.IsEmptyOrNull(Action.Icon)
 				ActionButton.Header.Header.Text = Action.Name
@@ -2667,12 +2772,12 @@ function Starlight:CreateWindow(WindowSettings)
 								end
 							end
 						end
-					end)
 
-					if Action.RemoveTextAfterFocusLost then
-						ActionInput.PART_Input.Text = ""
-						Action.CurrentValue = ""
-					end
+						if Action.RemoveTextAfterFocusLost then
+							ActionInput.PART_Input.Text = ""
+							Action.CurrentValue = ""
+						end
+					end)
 				end)
 
 				ActionInput.Interact.Focused:Connect(function()
@@ -2859,7 +2964,7 @@ function Starlight:CreateWindow(WindowSettings)
 		Tab.Instances.Page.Thumbnail.ImageLabel.Image =
 			Players:GetUserThumbnailAsync(Player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
 
-		task.defer(function()
+		task.spawn(function()
 			connections.__homeTabTime = RunService.RenderStepped:Connect(function()
 				local t = os.date("*t")
 				local hour = t.hour
@@ -2932,9 +3037,14 @@ function Starlight:CreateWindow(WindowSettings)
 		end
 
 		Tab.Instances.Page.Holder.Left.Server.Subheader.Text = "Currently Playing "
-			.. game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+			.. MarketplaceService:GetProductInfo(game.PlaceId).Name
 		Tab.Instances.Page.Holder.Left.Server.Frame.serverregion.Text = '<font size="14" color="#FFF" weight="semibold">Region</font>\n'
 			.. Localization:GetCountryRegionForPlayerAsync(Player)
+		
+		Tab.Instances.Page.Holder.Left.Server.Frame.copyjoin.MouseButton1Click:Connect(function()
+			setclipboard(`game:GetService("TeleportService"):TeleportToPlaceInstance({game.PlaceId}, "{game.JobId}", game:GetService("Players").LocalPlayer)`)
+		end)
+		
 		local function updatePlayerCount()
 			Tab.Instances.Page.Holder.Left.Server.Frame.playercount.Text = '<font size="14" color="#FFF" weight="semibold">Players</font>\n'
 				.. #Players:GetChildren()
@@ -2961,7 +3071,7 @@ function Starlight:CreateWindow(WindowSettings)
 		end
 
 		local function getPing()
-			return math.round((Players.LocalPlayer:GetNetworkPing() * 2) / 0.01)
+			return math.round(((isStudio and Players.LocalPlayer:GetNetworkPing() or StatsService.PerformanceStats.Ping:GetValue()) * 2) / 0.01)
 		end
 		local TimeFunction = RunService:IsRunning() and time or os.clock
 
@@ -3028,7 +3138,7 @@ function Starlight:CreateWindow(WindowSettings)
 				`<font size="14" color="#FFF" weight="semibold">Latency</font>\n{tostring(
 					math.floor(
 						TimeFunction() - Start >= 1 and #FrameUpdateTable
-							or #FrameUpdateTable / (TimeFunction() - Start)
+						or #FrameUpdateTable / (TimeFunction() - Start)
 					)
 				)} FPS\n{getPing()}ms`
 
@@ -3046,6 +3156,13 @@ function Starlight:CreateWindow(WindowSettings)
 
 			Tab.Instances.Page.Holder.Left.Server.Frame.time.Text = '<font size="14" color="#FFF" weight="semibold">Players</font>\n'
 				.. convertToHMS(time())
+		end
+		
+		if TabSettings.Changelog[1] then
+			Tab.Instances.Page.Holder.Center.Changelog.latest.Visible = true
+			Tab.Instances.Page.Holder.Center.Changelog.latest.Header.Text = TabSettings.Changelog[1].Title
+			Tab.Instances.Page.Holder.Center.Changelog.latest.date.Text = TabSettings.Changelog[1].Date
+			Tab.Instances.Page.Holder.Center.Changelog.latest.desc.Text = TabSettings.Changelog[1].Description
 		end
 
 		checkFriends()
@@ -4592,7 +4709,7 @@ function Starlight:CreateWindow(WindowSettings)
 								or ""
 
 							ElementInstance["PART_Backdrop"].Header.UIListLayout.HorizontalAlignment = Element.Values.CenterContent
-									and Enum.HorizontalAlignment.Center
+								and Enum.HorizontalAlignment.Center
 								or Enum.HorizontalAlignment.Left
 
 							if ElementInstance.PART_Backdrop:FindFirstChild("Accent") then
@@ -4918,7 +5035,7 @@ function Starlight:CreateWindow(WindowSettings)
 								ElementInstance.Header.UIPadding.PaddingLeft = UDim.new(0, 32)
 							end
 							ElementInstance.Header.Icon.Image = not String.IsEmptyOrNull(Element.Values.Icon)
-									and "rbxassetid://" .. Element.Values.Icon
+								and "rbxassetid://" .. Element.Values.Icon
 								or ""
 
 							ThemeMethods.bindTheme(ElementInstance.Header, "TextColor3", "Foregrounds.Light")
@@ -4931,7 +5048,7 @@ function Starlight:CreateWindow(WindowSettings)
 
 								ElementInstance.Checkbox.Icon.Visible = true
 								ElementInstance.Checkbox.Icon.Image = Element.Values.CheckboxIcon ~= nil
-										and "rbxassetid://" .. Element.Values.CheckboxIcon
+									and "rbxassetid://" .. Element.Values.CheckboxIcon
 									or ""
 
 								do
@@ -5159,9 +5276,9 @@ function Starlight:CreateWindow(WindowSettings)
 									ElementInstance.Header.UIPadding.PaddingLeft = UDim.new(0, 32)
 								end
 								ElementInstance.Header.Icon.Image = not String.IsEmptyOrNull(
-											Element.Values.Icon
-										)
-										and "rbxassetid://" .. Element.Values.Icon
+									Element.Values.Icon
+								)
+									and "rbxassetid://" .. Element.Values.Icon
 									or ""
 
 								if ElementInstance:FindFirstChild("Checkbox") then
@@ -5173,7 +5290,7 @@ function Starlight:CreateWindow(WindowSettings)
 
 									ElementInstance.Checkbox.Icon.Visible = true
 									ElementInstance.Checkbox.Icon.Image = Element.Values.CheckboxIcon ~= nil
-											and "rbxassetid://" .. Element.Values.CheckboxIcon
+										and "rbxassetid://" .. Element.Values.CheckboxIcon
 										or ""
 
 									do
@@ -5339,7 +5456,7 @@ function Starlight:CreateWindow(WindowSettings)
 					ElementSettings.Increment = ElementSettings.Increment or 1
 					ElementSettings.HideMax = ElementSettings.HideMax or false
 					ElementSettings.Suffix = ElementSettings.Suffix
-							and (ElementSettings.Suffix == "%" and `{ElementSettings.Suffix}` or ` {ElementSettings.Suffix}`)
+						and (ElementSettings.Suffix == "%" and `{ElementSettings.Suffix}` or ` {ElementSettings.Suffix}`)
 						or ""
 
 					local Element = {
@@ -5366,7 +5483,7 @@ function Starlight:CreateWindow(WindowSettings)
 							Element.Instance.Header.UIPadding.PaddingLeft = UDim.new(0, 32)
 						end
 						Element.Instance.Header.Icon.Image = not String.IsEmptyOrNull(Element.Values.Icon)
-								and "rbxassetid://" .. Element.Values.Icon
+							and "rbxassetid://" .. Element.Values.Icon
 							or ""
 
 						tooltip = AddToolTip(Element.Values.Tooltip, Element.Instance)
@@ -5432,7 +5549,7 @@ function Starlight:CreateWindow(WindowSettings)
 							end
 						end)
 
-						Element.Instance.PART_Backdrop.PART_Progress.Knob.InputBegan:Connect(function(Input)
+						Element.Instance.PART_Backdrop.PART_Progress.Knob.Interact.InputBegan:Connect(function(Input)
 							if
 								Input.UserInputType == Enum.UserInputType.MouseButton1
 								or Input.UserInputType == Enum.UserInputType.Touch
@@ -5441,7 +5558,7 @@ function Starlight:CreateWindow(WindowSettings)
 							end
 						end)
 
-						Element.Instance.PART_Backdrop.PART_Progress.Knob.InputEnded:Connect(function(Input)
+						Element.Instance.PART_Backdrop.PART_Progress.Knob.Interact.InputEnded:Connect(function(Input)
 							if
 								Input.UserInputType == Enum.UserInputType.MouseButton1
 								or Input.UserInputType == Enum.UserInputType.Touch
@@ -5466,7 +5583,7 @@ function Starlight:CreateWindow(WindowSettings)
 									elseif
 										Location
 										> Element.Instance.PART_Backdrop.AbsolutePosition.X
-											+ Element.Instance.PART_Backdrop.AbsoluteSize.X
+										+ Element.Instance.PART_Backdrop.AbsoluteSize.X
 									then
 										Location = Element.Instance.PART_Backdrop.AbsolutePosition.X
 											+ Element.Instance.PART_Backdrop.AbsoluteSize.X
@@ -5477,7 +5594,7 @@ function Starlight:CreateWindow(WindowSettings)
 									elseif
 										Current
 										> Element.Instance.PART_Backdrop.AbsolutePosition.X
-											+ Element.Instance.PART_Backdrop.AbsoluteSize.X
+										+ Element.Instance.PART_Backdrop.AbsoluteSize.X
 									then
 										Current = Element.Instance.PART_Backdrop.AbsolutePosition.X
 											+ Element.Instance.PART_Backdrop.AbsoluteSize.X
@@ -5542,7 +5659,7 @@ function Starlight:CreateWindow(WindowSettings)
 						Element.Instance.PART_Backdrop.Interact.MouseButton1Down:Connect(function(X)
 							dragFunction(X)
 						end)
-						Element.Instance.PART_Backdrop.PART_Progress.Knob.MouseButton1Down:Connect(function(X)
+						Element.Instance.PART_Backdrop.PART_Progress.Knob.Interact.MouseButton1Down:Connect(function(X)
 							dragFunction(X)
 						end)
 
@@ -5739,7 +5856,7 @@ function Starlight:CreateWindow(WindowSettings)
 								Element.Instance.Header.UIPadding.PaddingLeft = UDim.new(0, 32)
 							end
 							Element.Instance.Header.Icon.Image = not String.IsEmptyOrNull(Element.Values.Icon)
-									and "rbxassetid://" .. Element.Values.Icon
+								and "rbxassetid://" .. Element.Values.Icon
 								or ""
 
 							tooltip.Text = Element.Values.Tooltip or tooltip.Text
@@ -5881,6 +5998,8 @@ function Starlight:CreateWindow(WindowSettings)
 										)
 								end
 							end
+
+							Element.Values.CurrentValue = Element.Instance.PART_Backdrop.PART_Input.Text
 							if not Element.Values.Enter then
 								local Success, Response = pcall(function()
 									Element.Values.Callback(Element.Values.CurrentValue)
@@ -5917,8 +6036,6 @@ function Starlight:CreateWindow(WindowSettings)
 									),
 								}
 							)
-
-							Element.Values.CurrentValue = Element.Instance.PART_Backdrop.PART_Input.Text
 						end)
 
 						Element.Instance.Name = "INPUT_" .. Index
@@ -5931,7 +6048,7 @@ function Starlight:CreateWindow(WindowSettings)
 						end
 						Element.Instance.PART_Backdrop.PART_Input.ClearTextOnFocus = Element.Values.RemoveTextOnFocus
 						Element.Instance.Header.Icon.Image = not String.IsEmptyOrNull(Element.Values.Icon)
-								and "rbxassetid://" .. Element.Values.Icon
+							and "rbxassetid://" .. Element.Values.Icon
 							or ""
 						task.delay(0.2, function()
 							Element.Instance.PART_Backdrop.PART_Input.PlaceholderText = Element.Values.PlaceholderText
@@ -5985,7 +6102,7 @@ function Starlight:CreateWindow(WindowSettings)
 								Element.Instance.Header.UIPadding.PaddingLeft = UDim.new(0, 32)
 							end
 							Element.Instance.Header.Icon.Image = not String.IsEmptyOrNull(Element.Values.Icon)
-									and "rbxassetid://" .. Element.Values.Icon
+								and "rbxassetid://" .. Element.Values.Icon
 								or ""
 							Element.Instance.PART_Backdrop.PART_Input.PlaceholderText = Element.Values.PlaceholderText
 							Element.Instance.PART_Backdrop.PART_Input.Text = Element.Values.CurrentValue
@@ -6004,6 +6121,24 @@ function Starlight:CreateWindow(WindowSettings)
 									),
 								}
 							)
+							local Success, Response = pcall(function()
+								Element.Values.Callback(Element.Values.CurrentValue)
+							end)
+
+							if not Success then
+								Element.Instance.Header.Text = "Callback Error"
+								warn(`Starlight Interface Suite - Callback Error | {Element.Values.Name} ({Index})`)
+								print(Response)
+								if WindowSettings.NotifyOnCallbackError then
+									Starlight:Notification({
+										Title = Element.Values.Name .. " Callback Error",
+										Content = tostring(Response),
+										Icon = 129398364168201,
+									})
+								end
+								wait(0.5)
+								Element.Instance.Header.Text = ElementSettings.Name
+							end
 
 							tooltip.Text = Element.Values.Tooltip or ""
 
@@ -6069,7 +6204,7 @@ function Starlight:CreateWindow(WindowSettings)
 							Element.Instance.Header.UIPadding.PaddingLeft = UDim.new(0, 32)
 						end
 						Element.Instance.Header.Icon.Image = not String.IsEmptyOrNull(Element.Values.Icon)
-								and "rbxassetid://" .. Element.Values.Icon
+							and "rbxassetid://" .. Element.Values.Icon
 							or ""
 
 						ThemeMethods.bindTheme(Element.Instance.Header, "TextColor3", "Foregrounds.Light")
@@ -6100,7 +6235,7 @@ function Starlight:CreateWindow(WindowSettings)
 								Element.Instance.Header.UIPadding.PaddingLeft = UDim.new(0, 32)
 							end
 							Element.Instance.Header.Icon.Image = not String.IsEmptyOrNull(Element.Values.Icon)
-									and "rbxassetid://" .. Element.Values.Icon
+								and "rbxassetid://" .. Element.Values.Icon
 								or ""
 
 							tooltip.Text = Element.Values.Tooltip or ""
@@ -6197,6 +6332,7 @@ function Starlight:CreateWindow(WindowSettings)
 							NestedElement.Instance = Element.Instance.ElementContainer.Bind:Clone()
 							NestedElement.Instance.Visible = true
 							NestedElement.Instance.Parent = Parent.Instance.ElementContainer
+							Parent.Instance.Header.Size = UDim2.fromOffset(Parent.Instance.Header.Size.X.Offset - 26, 20)
 
 							NestedElement.Instance.Name = "BIND_" .. NestedIndex
 
@@ -6220,13 +6356,13 @@ function Starlight:CreateWindow(WindowSettings)
 
 							task.delay(0.2, function()
 								NestedElement.Instance.Text = NestedElement.Values.CurrentValue == "No Bind"
-										and '<font color="rgb(' .. tostring(
-											math.floor(Starlight.CurrentTheme.Foregrounds.Medium.R * 255 + 0.5)
-										) .. "," .. tostring(
-											math.floor(Starlight.CurrentTheme.Foregrounds.Medium.G * 255 + 0.5)
-										) .. "," .. tostring(
-											math.floor(Starlight.CurrentTheme.Foregrounds.Medium.B * 255 + 0.5)
-										) .. ')">No Bind</font>'
+									and '<font color="rgb(' .. tostring(
+										math.floor(Starlight.CurrentTheme.Foregrounds.Medium.R * 255 + 0.5)
+									) .. "," .. tostring(
+									math.floor(Starlight.CurrentTheme.Foregrounds.Medium.G * 255 + 0.5)
+								) .. "," .. tostring(
+									math.floor(Starlight.CurrentTheme.Foregrounds.Medium.B * 255 + 0.5)
+								) .. ')">No Bind</font>'
 									or NestedElement.Values.CurrentValue
 							end)
 
@@ -6340,20 +6476,20 @@ function Starlight:CreateWindow(WindowSettings)
 												NestedElement.Instance:ReleaseFocus()
 											elseif input.KeyCode == Enum.KeyCode[Starlight.WindowKeybind] then
 												NestedElement.Instance.Text = NestedElement.Values.CurrentValue
-															== "No Bind"
-														and '<font color="rgb(' .. tostring(
-															math.floor(
-																Starlight.CurrentTheme.Foregrounds.Medium.R * 255 + 0.5
-															)
-														) .. "," .. tostring(
-															math.floor(
-																Starlight.CurrentTheme.Foregrounds.Medium.G * 255 + 0.5
-															)
-														) .. "," .. tostring(
-															math.floor(
-																Starlight.CurrentTheme.Foregrounds.Medium.B * 255 + 0.5
-															)
-														) .. ')">No Bind</font>'
+													== "No Bind"
+													and '<font color="rgb(' .. tostring(
+														math.floor(
+															Starlight.CurrentTheme.Foregrounds.Medium.R * 255 + 0.5
+														)
+													) .. "," .. tostring(
+													math.floor(
+														Starlight.CurrentTheme.Foregrounds.Medium.G * 255 + 0.5
+													)
+												) .. "," .. tostring(
+													math.floor(
+														Starlight.CurrentTheme.Foregrounds.Medium.B * 255 + 0.5
+													)
+												) .. ')">No Bind</font>'
 													or NestedElement.Values.CurrentValue
 												NestedElement.Instance:ReleaseFocus()
 											end
@@ -6569,6 +6705,7 @@ function Starlight:CreateWindow(WindowSettings)
 									connections[ParentIndex .. "_" .. Index]:Disconnect()
 								end
 								connections[ParentIndex .. "_" .. Index] = nil
+								Parent.Instance.Header.Size = UDim2.fromOffset(Parent.Instance.Header.Size.X.Offset + 26, 20)
 							end
 
 							function NestedElement:Set(NewNestedSettings, NewNestedIndex)
@@ -6588,13 +6725,13 @@ function Starlight:CreateWindow(WindowSettings)
 								NestedElement.Instance.Name = "BIND_" .. NestedIndex
 
 								NestedElement.Instance.Text = NestedElement.Values.CurrentValue == "No Bind"
-										and '<font color="rgb(' .. tostring(
-											math.floor(Starlight.CurrentTheme.Foregrounds.Medium.R * 255 + 0.5)
-										) .. "," .. tostring(
-											math.floor(Starlight.CurrentTheme.Foregrounds.Medium.G * 255 + 0.5)
-										) .. "," .. tostring(
-											math.floor(Starlight.CurrentTheme.Foregrounds.Medium.B * 255 + 0.5)
-										) .. ')">No Bind</font>'
+									and '<font color="rgb(' .. tostring(
+										math.floor(Starlight.CurrentTheme.Foregrounds.Medium.R * 255 + 0.5)
+									) .. "," .. tostring(
+									math.floor(Starlight.CurrentTheme.Foregrounds.Medium.G * 255 + 0.5)
+								) .. "," .. tostring(
+									math.floor(Starlight.CurrentTheme.Foregrounds.Medium.B * 255 + 0.5)
+								) .. ')">No Bind</font>'
 									or NestedElement.Values.CurrentValue
 
 								local Success, Response = pcall(function()
@@ -6658,6 +6795,7 @@ function Starlight:CreateWindow(WindowSettings)
 							NestedElement.Instances[1] = Element.Instance.ElementContainer.ColorPicker:Clone()
 							NestedElement.Instances[1].Visible = true
 							NestedElement.Instances[1].Parent = Parent.Instance.ElementContainer
+							Parent.Instance.Header.Size = UDim2.fromOffset(Parent.Instance.Header.Size.X.Offset - 26, 20)
 
 							NestedElement.Instances[2] = Resources.Elements.ColorPicker:Clone()
 							NestedElement.Instances[2].Parent = StarlightUI.PopupOverlay
@@ -6744,9 +6882,9 @@ function Starlight:CreateWindow(WindowSettings)
 										if
 											not (
 												p.X >= pos.X
-												and p.X <= pos.X + size.X
-												and p.Y >= pos.Y
-												and p.Y <= pos.Y + size.Y
+													and p.X <= pos.X + size.X
+													and p.Y >= pos.Y
+													and p.Y <= pos.Y + size.Y
 											) and not hover
 										then
 											close()
@@ -6970,12 +7108,12 @@ function Starlight:CreateWindow(WindowSettings)
 
 										if Input.Name == "Hex" then
 											inputinstance.Text = NestedElement.Values.Transparency == nil
-													and string.format(
-														"#%02X%02X%02X",
-														color.R * 0xFF,
-														color.G * 0xFF,
-														color.B * 0xFF
-													)
+												and string.format(
+													"#%02X%02X%02X",
+													color.R * 0xFF,
+													color.G * 0xFF,
+													color.B * 0xFF
+												)
 												or string.format(
 													"#%02X%02X%02X%02X",
 													color.R * 0xFF,
@@ -6994,13 +7132,13 @@ function Starlight:CreateWindow(WindowSettings)
 										if Input.Name == "Hue" then
 											if
 												currentBox
-													== NestedElement.Instances[2].Container.Values.AlphaHSV.Hue
+												== NestedElement.Instances[2].Container.Values.AlphaHSV.Hue
 												or currentBox == NestedElement.Instances[2].Container.Values.HexRGB.Red
 												or currentBox == NestedElement.Instances[2].Container.Values.HexRGB.Green
 												or currentBox == NestedElement.Instances[2].Container.Values.HexRGB.Blue
 												or currentBox == NestedElement.Instances[2].Container.Values.HexRGB.Hex
 												or currentBox
-													== NestedElement.Instances[2].Container.Color.HueSlider
+												== NestedElement.Instances[2].Container.Color.HueSlider
 											then
 												local h, _, _ = NestedElement.Values.CurrentValue:ToHSV()
 
@@ -7196,13 +7334,13 @@ function Starlight:CreateWindow(WindowSettings)
 									if mainDragging then
 										local localX = math.clamp(
 											Mouse.X
-												- NestedElement.Instances[2].Container.Color.ColorPicker.AbsolutePosition.X,
+											- NestedElement.Instances[2].Container.Color.ColorPicker.AbsolutePosition.X,
 											0,
 											NestedElement.Instances[2].Container.Color.ColorPicker.AbsoluteSize.X
 										)
 										local localY = math.clamp(
 											Mouse.Y
-												- NestedElement.Instances[2].Container.Color.ColorPicker.AbsolutePosition.Y,
+											- NestedElement.Instances[2].Container.Color.ColorPicker.AbsolutePosition.Y,
 											0,
 											NestedElement.Instances[2].Container.Color.ColorPicker.AbsoluteSize.Y
 										)
@@ -7213,10 +7351,10 @@ function Starlight:CreateWindow(WindowSettings)
 										s = localX
 											/ NestedElement.Instances[2].Container.Color.ColorPicker.AbsoluteSize.X
 										v = 1
-											- (
-												localY
+										- (
+											localY
 												/ NestedElement.Instances[2].Container.Color.ColorPicker.AbsoluteSize.Y
-											)
+										)
 										local color = Color3.fromHSV(h, s, v)
 										NestedElement.Values.CurrentValue = color
 										updateInstances(NestedElement.Instances[2].Container.Color.ColorPicker)
@@ -7228,7 +7366,7 @@ function Starlight:CreateWindow(WindowSettings)
 									if sliderDragging then
 										local localY = math.clamp(
 											Mouse.Y
-												- NestedElement.Instances[2].Container.Color.HueSlider.AbsolutePosition.Y,
+											- NestedElement.Instances[2].Container.Color.HueSlider.AbsolutePosition.Y,
 											0,
 											NestedElement.Instances[2].Container.Color.HueSlider.AbsoluteSize.Y
 										)
@@ -7248,7 +7386,7 @@ function Starlight:CreateWindow(WindowSettings)
 									if transDragging then
 										local localY = math.clamp(
 											Mouse.Y
-												- NestedElement.Instances[2].Container.Color.TransparencySlider.AbsolutePosition.Y,
+											- NestedElement.Instances[2].Container.Color.TransparencySlider.AbsolutePosition.Y,
 											0,
 											NestedElement.Instances[2].Container.Color.TransparencySlider.AbsoluteSize.Y
 										)
@@ -7314,12 +7452,12 @@ function Starlight:CreateWindow(WindowSettings)
 												end)
 											then
 												inputinstance.Text = NestedElement.Values.Transparency == nil
-														and string.format(
-															"#%02X%02X%02X",
-															NestedElement.Values.CurrentValue.R * 0xFF,
-															NestedElement.Values.CurrentValue.G * 0xFF,
-															NestedElement.Values.CurrentValue.B * 0xFF
-														)
+													and string.format(
+														"#%02X%02X%02X",
+														NestedElement.Values.CurrentValue.R * 0xFF,
+														NestedElement.Values.CurrentValue.G * 0xFF,
+														NestedElement.Values.CurrentValue.B * 0xFF
+													)
 													or string.format(
 														"#%02X%02X%02X%02X",
 														NestedElement.Values.CurrentValue.R * 0xFF,
@@ -7340,7 +7478,7 @@ function Starlight:CreateWindow(WindowSettings)
 														return
 													end
 													NestedElement.Values.Transparency = 1
-														- tonumber(inputinstance.Text) / 255
+													- tonumber(inputinstance.Text) / 255
 													updateInstances(Input)
 												end)
 											then
@@ -7533,6 +7671,7 @@ function Starlight:CreateWindow(WindowSettings)
 								NestedElement.Instances[1]:Destroy()
 								NestedElement.Instances[2]:Destroy()
 								NestedElement = nil
+								Parent.Instance.Header.Size = UDim2.fromOffset(Parent.Instance.Header.Size.X.Offset - 26, 20)
 							end
 
 							function NestedElement:Set(NewNestedSettings, NewNestedIndex, ignoreCallback: boolean?)
@@ -7727,9 +7866,9 @@ function Starlight:CreateWindow(WindowSettings)
 										if
 											not (
 												p.X >= pos.X
-												and p.X <= pos.X + size.X
-												and p.Y >= pos.Y
-												and p.Y <= pos.Y + size.Y
+													and p.X <= pos.X + size.X
+													and p.Y >= pos.Y
+													and p.Y <= pos.Y + size.Y
 											) and not hover
 										then
 											close()
@@ -8183,7 +8322,7 @@ function Starlight:CreateWindow(WindowSettings)
 							Element.Instance.Content.UIPadding.PaddingLeft = UDim.new(0, 32)
 						end
 						Element.Instance.Header.Icon.Image = not String.IsEmptyOrNull(Element.Values.Icon)
-								and "rbxassetid://" .. Element.Values.Icon
+							and "rbxassetid://" .. Element.Values.Icon
 							or ""
 						Element.Instance.Content.Text = Element.Values.Content
 
@@ -8216,7 +8355,7 @@ function Starlight:CreateWindow(WindowSettings)
 								Element.Instance.Content.UIPadding.PaddingLeft = UDim.new(0, 32)
 							end
 							Element.Instance.Header.Icon.Image = not String.IsEmptyOrNull(Element.Values.Icon)
-									and "rbxassetid://" .. Element.Values.Icon
+								and "rbxassetid://" .. Element.Values.Icon
 								or ""
 							Element.Instance.Content.Text = Element.Values.Content
 
@@ -8268,7 +8407,7 @@ function Starlight:CreateWindow(WindowSettings)
 				end
 
 				local themesPath = WindowSettings.FileSettings.ThemesInRoot
-						and `{Starlight.FileSystem.Folder}/{root}/themes`
+					and `{Starlight.FileSystem.Folder}/{root}/themes`
 					or `{Starlight.FileSystem.Folder}/{folderpath}/themes`
 
 				if not isStudio and not isfolder(themesPath) then
@@ -9001,7 +9140,7 @@ function Starlight:CreateWindow(WindowSettings)
 					Name = "Current Autoload Theme:",
 					Content = not isStudio and (isfile(`{themesPath}/autoload.txt`) and readfile(
 						`{themesPath}/autoload.txt`
-					)) or "Starlight",
+						)) or "Starlight",
 				}, "autoloadlabel")
 
 				instance:CreateButton({
@@ -9590,8 +9729,8 @@ function Starlight:CreateWindow(WindowSettings)
 									TweenInfo.new(0.4, Enum.EasingStyle.Exponential),
 									{
 										BackgroundTransparency = notificationAcrylic
-												and (mainAcrylic and 0.55 or 0.375)
-											or 0,
+										and (mainAcrylic and 0.55 or 0.375)
+										or 0,
 									}
 								)
 								:Play()
@@ -10391,14 +10530,14 @@ if isStudio and enabled then
 	}, "customtab")
 
 	Starlight:LoadAutoloadConfig()
-end --]=]
+end --]=]0
 
 --// ENDSECTION
 
 --// SECTION : Protection of our work
 Starlight:Notification({
 	Title = "Enjoying Starlight?",
-	Content = "Thanks for using a script that uses our UI Library. Starlight is made with love, care and effort by Nebula Softworks And Nebula Softworks alone. No other developer or such entity. We are spreading this message as a skid who claims others work as their own, lizardleo123 on discord, is claiming Starlight as theirs. Help us protect our work by staying away from his lies. You can always find us at dsc.gg/nebulasoftworks.\nThank you ❤️",
+	Content = "Thanks for using a script that uses our UI Library. Starlight is made with love, care and effort by Nebula Softworks And Nebula Softworks alone. No other developer or such entity. We are spreading this message as a skid who claims others work as their own, etheruit (a fake bitdancer - bitdancer._) on discord, is claiming Starlight as theirs. Help us protect our work by staying away from his lies. You can always find us at dsc.gg/nebulasoftworks.\nThank you ❤️",
 	Duration = 10,
 	Icon = 105789146907268,
 })
