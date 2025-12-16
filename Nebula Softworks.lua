@@ -2096,11 +2096,6 @@ function Starlight:Notification(data)
 		newNotification.Parent = StarlightUI.Notifications
 		newNotification.LayoutOrder = #StarlightUI.Notifications:GetChildren()
 		newNotification.Visible = false
-		local AcrylicObject = Acrylic.AcrylicPaint()
-		pcall(function()
-			AcrylicObject.AddParent(newNotification)
-			AcrylicObject.Frame.Parent = newNotification
-		end)
 
 		local function setDuration(elapsed)
 			if elapsed <= 4 then
