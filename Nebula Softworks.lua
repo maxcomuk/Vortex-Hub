@@ -2650,11 +2650,8 @@ function Starlight:CreateWindow(WindowSettings)
 
 		local connection
 		local function close(x)
-			Tween(Modal.Instance.UIScale, { Scale = 1.25 })
 			Hide(Modal.Instance)
-			Tween(mainWindow.ModalOverlay, { BackgroundTransparency = 1, ImageTransparency = 1 }, function()
-				Modal.Instance:Destroy()
-			end)
+            Modal.Instance:Destroy()
 			task.wait(0.18)
 			mainWindow.ModalOverlay.Visible = false
 			mainWindow.Content.Interactable = true
