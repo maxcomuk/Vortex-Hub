@@ -150,9 +150,6 @@ else
 	end
 end
 
-local isStudio = RunService:IsStudio() or false
-local Acrylic = isStudio and require(ReplicatedStorage.AcrylicBundled) or loadstring(game:HttpGet("https://raw.nebulasoftworks.xyz/starlight/AcrylicModule.luau"))()
-Acrylic.Init()
 
 local Request = (syn and syn.request)
 	or (fluxus and fluxus.request)
