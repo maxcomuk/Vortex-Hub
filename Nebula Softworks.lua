@@ -150,6 +150,9 @@ else
 	end
 end
 
+local isStudio = RunService:IsStudio() or false
+local Acrylic = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Starlight-Interface-Suite/master/Modules/Acrylic/Build.luau"))()
+Acrylic.Init()
 
 local Request = (syn and syn.request)
 	or (fluxus and fluxus.request)
