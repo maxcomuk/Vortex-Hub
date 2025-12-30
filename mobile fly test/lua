@@ -1,0 +1,1010 @@
+-- Waiting for the game to load --
+while not game:IsLoaded() do
+    task.wait()
+end
+
+-- Global Variables --
+local globalVar = {}
+globalVar.players = game:GetService("Players")
+globalVar.player = globalVar.players.LocalPlayer
+globalVar.char = globalVar.player.Character or globalVar.player.CharacterAdded:Wait()
+globalVar.hum = globalVar.char:WaitForChild("Humanoid")
+globalVar.root = globalVar.char:WaitForChild("HumanoidRootPart")
+globalVar.globalConnections = {}
+globalVar.globalConnections.spoofedUsernameConnections = {}
+
+-- Services --
+local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
+local Uis = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local TeleportService = game:GetService("TeleportService")
+local SoundService = game:GetService("SoundService")
+local Lighting = game:GetService("Lighting")
+local virtualUser = game:GetService("VirtualUser")
+local QueueOnTeleport = queueonteleport or queue_on_teleport or syn.queue_on_teleport or nil
+local request = request or http_request or (syn and syn.request)
+
+-- Misc Variables --
+local original_username = globalVar.player.Name
+local spoofed_username = original_username
+
+-- Module Scripts --
+local ControlModule
+
+-- || Pre Loading Assets || --
+local preLoadSuccess, preLoadErr = pcall(function()
+    ControlModule = require(game.Players.LocalPlayer.PlayerScripts:WaitForChild("PlayerModule"):WaitForChild("ControlModule"))
+end)
+
+if not preLoadSuccess and preLoadErr then warn("[Vortex Hub] Failed to load:", preLoadErr) end
+
+-- // Unc Test \\ --
+local supportedFeaturesCounter = 0
+local supportedMethods = {
+    "hookfunction",
+    "hookmetamethod",
+    "getgc",
+}
+
+local executorSupported = {}
+
+for _, methodName in ipairs(supportedMethods) do
+    local methodFunc = getgenv()[methodName]
+    if type(methodFunc) == "function" then
+        executorSupported[methodName] = true
+    elseif type(methodFunc) == "table" then
+        executorSupported[methodName] = true
+    else
+        executorSupported[methodName] = false
+    end
+end
+
+-- // L O A D I N G   U I   L I B R A R Y \\ --
+local Library
+
+local success, err = pcall(function()
+    Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/maxcomuk/obsidion/refs/heads/main/UI%20Library"))()
+    Library.ShowToggleFrameInKeybinds = true
+end)
+
+if not success then warn("Failed to load ui library reason ->", err) return end
+
+-- Dependacies --
+local DependancyToggles = Library.Toggles
+local Toggles = {}
+
+-- Loading Ui Icons --
+local Icons = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/lucide-roblox-direct/refs/heads/main/source.lua"))()
+Library:SetIconModule(Icons)
+
+-- Loading Ui SaveManager + ThemeManager --
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/main/addons/SaveManager.lua"))()
+local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/deividcomsono/Obsidian/main/addons/ThemeManager.lua"))()
+
+-- // C R E A T I N G   U I   W I N D O W \\ --
+local Window = Library:CreateWindow({
+    Title = '<font size="16">Blox Fruits</font>',
+    Footer = "https://discord.gg/v7uWW4vBhs",
+    Size = UDim2.fromOffset(700, 580),
+    ToggleKeybind = Enum.KeyCode.Insert,
+    ShowCustomCursor = false,
+    Font = Enum.Font.Fantasy,
+    CornerRadius = 6,
+    Icon = 78646709408429,
+    IconSize = UDim2.fromOffset(40, 40),
+    BackgroundImage = nil,
+    GlobalSearch = true,
+    EnableSidebarResize = true,
+})
+
+Window:SetSidebarWidth(180)
+
+-- Notifying user the Ui libary has loaded successfully
+Library:Notify({
+    Title = "<b>Welcome " .. globalVar.player.Name .. "</b>",
+    Description = "Script has loaded successfully",
+    Time = 3.5,
+    SoundId = 4835664238,
+})
+
+-- // C R E A T I N G   T A B S \\ --
+local tabs = {
+    homeTab = Window:AddTab("Home", "house"),
+    playerTab = Window:AddTab("Player", "user"),
+    settingsTab = Window:AddTab("Settings", "settings"),
+}
+
+-- // C R E A T I N G   G R O U P B O X E S \\ --
+local groupBoxes = {
+    homeGroup1 = tabs.homeTab:AddLeftGroupbox("Player Information", "user"),
+    homeGroup2 = tabs.homeTab:AddRightGroupbox("Games Supported", "gamepad-2"),
+    homeGroup3 = tabs.homeTab:AddLeftGroupbox("Vortex Hub Account", "key-round"),
+    homeGroup4 = tabs.homeTab:AddRightGroupbox("Vortex Hub Socials", "github"),
+    homeGroup5 = tabs.homeTab:AddRightGroupbox("Unc Test", "newspaper"),
+    playerGroup1 = tabs.playerTab:AddLeftGroupbox("LocalPlayer Modifications", "monitor-cog"),
+    settingsGroup1 = tabs.settingsTab:AddRightGroupbox("Ui Settings", "wrench"),
+}
+
+--------------- H O M E   G R O U P   1 ---------------
+-- Container for home group features
+local home_group_features = {}
+
+-- Player screenshots
+local player_thumbnail = nil
+
+spawn(function()
+    player_thumbnail = globalVar.players:GetUserThumbnailAsync(
+        globalVar.player.UserId,
+        Enum.ThumbnailType.AvatarThumbnail,
+        Enum.ThumbnailSize.Size352x352
+    )
+
+    -- Creating Player Image Url
+    home_group_features.playerImageUrl = groupBoxes.homeGroup1:AddImage("player_thumbnail_image_flag", {
+        Image = player_thumbnail,
+        Transparency = 0,
+        BackgroundTransparency = 1,
+        Color = Color3.new(1, 1, 1),
+        RectOffset = Vector2.zero,
+        RectSize = Vector2.zero,
+        ScaleType = Enum.ScaleType.Fit,
+        Height = 150,
+    })
+end)
+
+-- Updating Fps + Ping/ms on the peformance tab Function
+local function update_peformance_tab()
+    if globalVar.globalConnections.WatermarkConnection then
+        globalVar.globalConnections.WatermarkConnection:Disconnect()
+    end
+
+    Library:SetWatermarkVisibility(true)
+
+    local FrameTimer = tick()
+    local FrameCounter = 0
+    local FPS = 60
+    globalVar.globalConnections.WatermarkConnection = RunService.RenderStepped:Connect(function()
+        FrameCounter += 1;
+    
+        if (tick() - FrameTimer) >= 1 then
+            FPS = FrameCounter;
+            FrameTimer = tick();
+            FrameCounter = 0;
+        end;
+            
+        Library:SetWatermark((globalVar.player.Name .. ' | %s fps | %s ms | %s players'):format(
+            math.floor(FPS),
+            math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue()),
+            #game.Players:GetPlayers()
+        ))
+    end)
+end
+
+-- Stopping Update to peformance tab Function
+local function stop_updating_peformance_tab()
+    if globalVar.globalConnections.WatermarkConnection then
+        globalVar.globalConnections.WatermarkConnection:Disconnect()
+    end
+
+    Library:SetWatermarkVisibility(false)
+end
+
+-- Show Peformance / watermark toggle
+home_group_features.watermarkToggle = groupBoxes.homeGroup1:AddToggle("pefromance_flag", {
+    Text = "Show Peformance",
+    Default = false,
+    Tooltip = "Displays your username + fps + ping/ms",
+    Callback = function(state)
+        if state then
+            update_peformance_tab()
+        else
+            stop_updating_peformance_tab()
+        end
+    end
+})
+
+-- Copy Place-Id Button
+home_group_features.copyPlaceId = groupBoxes.homeGroup1:AddButton("copy_place_id_flag", {
+    Text = "Copy PlaceId",
+    Tooltip = "Copies the Id of your current roblox game (PlaceId)",
+    Func = function()
+        if setclipboard then
+            setclipboard(tostring(game.PlaceId))
+            Library:Notify("Sucessfully Copied PlaceId", 3, 3450794184)
+        else
+            Library:Notify({
+                Title = "Failed to copy PlaceId",
+                Description = "Your executor doesnt support this feature",
+                Time = 3,
+                SoundId = 2865228021
+            })
+        end
+    end
+})
+
+-- Copy Job-Id Button
+home_group_features.copyJobId = groupBoxes.homeGroup1:AddButton("copy_job_id_flag", {
+    Text = "Copy JobId",
+    Tooltip = "Copies the Id of your current roblox server inside the game (JobId)",
+    Func = function()
+        if setclipboard then
+            setclipboard(tostring(game.JobId))
+            Library:Notify("Sucessfully Copied JobId", 3, 3450794184)
+        else
+            Library:Notify({
+                Title = "Failed to copy JobId",
+                Description = "Your executor doesnt support this feature",
+                Time = 3,
+                SoundId = 2865228021
+            })
+        end
+    end
+})
+
+-- Copy User-Name Button
+home_group_features.copyUserName = groupBoxes.homeGroup1:AddButton("copy_username_flag", {
+    Text = "Copy Username",
+    Func = function()
+        if setclipboard then
+            setclipboard(tostring(globalVar.player.Name))
+            Library:Notify("Sucessfully Copied Username", 3, 3450794184)
+        else
+            Library:Notify({
+                Title = "Failed to copy Username",
+                Description = "Your executor doesnt support this feature",
+                Time = 3,
+                SoundId = 2865228021
+            })
+        end
+    end
+})
+
+-- Spoof Players Username (Visual Only)
+local function spoof_username(text)
+    spoofed_username = text
+    if spoofed_username == nil then return end
+
+    if globalVar.globalConnections.spoofedUsernameConnections then
+        for _, conn in next, globalVar.globalConnections.spoofedUsernameConnections do
+            if conn then
+                conn:Disconnect()
+            end
+        end
+    end
+
+    for index, value in next, game:GetDescendants() do
+        if value.ClassName == "TextLabel" then
+            local plrName = string.find(value.Text, globalVar.player.Name)
+            if plrName then
+                local str = value.Text:gsub(globalVar.player.Name, spoofed_username)
+                value.Text = str
+            end
+
+            local connection =  value:GetPropertyChangedSignal("Text"):Connect(function()
+                local str = value.Text:gsub(globalVar.player.Name, spoofed_username)
+                value.Text = str
+            end)
+
+            table.insert(globalVar.globalConnections.spoofedUsernameConnections, connection)
+        end
+    end
+
+    local trackingUsernameConnection = game.DescendantAdded:Connect(function(value)
+        if value.ClassName == "TextLabel" then
+            local plrName = string.find(value.Text, globalVar.player.Name)
+            if plrName then
+                local str = value.Text:gsub(globalVar.player.Name, spoofed_username)
+                value.Text = str
+            end
+
+            local connection = value:GetPropertyChangedSignal("Text"):Connect(function()
+                local str = value.Text:gsub(globalVar.player.Name, spoofed_username)
+            end)
+
+            table.insert(globalVar.globalConnections.spoofedUsernameConnections, connection)
+        end
+    end)
+
+    table.insert(globalVar.globalConnections.spoofedUsernameConnections, trackingUsernameConnection)
+    globalVar.player.Name = spoofed_username
+end
+
+home_group_features.spoofUsernameInput = groupBoxes.homeGroup1:AddInput("spoof_username_flag", {
+    Text = "Spoof Username (Visual)",
+    Default = globalVar.player.Name,
+    Finished = true,
+    Tooltip = "Changes your username. note this is visuals only meaning it wont nobody else will see this fake name",
+    Callback = function(text)
+        spoof_username(text)
+    end
+})
+
+local function reset_spoofed_username()
+    if globalVar.globalConnections.spoofedUsernameConnections then
+        for _, conn in next, globalVar.globalConnections.spoofedUsernameConnections do
+            if conn then
+                conn:Disconnect() 
+            end
+        end
+    end
+    
+    for index, value in next, game:GetDescendants() do
+        if value.ClassName == "TextLabel" then
+            local plrName = string.find(value.Text, spoofed_username)
+            if plrName then
+                local str = value.Text:gsub(spoofed_username, original_username)
+                value.Text = str
+            end
+        end
+    end
+end
+
+--------------- H O M E   G R O U P   2 ---------------
+home_group_features.workingSupportedGameLabel = groupBoxes.homeGroup2:AddLabel("Working: 🟢", false)
+home_group_features.maybeWorkingSuportedGameLabel = groupBoxes.homeGroup2:AddLabel("Unstable: 🟡", false)
+home_group_features.notWorkingSupportedGameLabel = groupBoxes.homeGroup2:AddLabel("Not Working: 🔴", false)
+home_group_features.supportedGamesDivider = groupBoxes.homeGroup2:AddDivider()
+home_group_features.streetLifeRemasterdLabel = groupBoxes.homeGroup2:AddLabel("Street Life Remasterd: 🟢", false)
+home_group_features.fischLabel = groupBoxes.homeGroup2:AddLabel("Fisch [KEYLESS] : 🟢", false)
+
+--------------- H O M E   G R O U P   3 ---------------
+-- License key timer
+local stringTimer = "License Duration: 0"
+
+-- License Key Information
+local keyStatus = LRM_UserNote or ""
+if string.find(string.lower(keyStatus), "not specified") or keyStatus == "Ad Reward" or keyStatus == "" then
+	keyStatus = "Basic"
+end
+
+local totalExecutions = LRM_TotalExecutions or 0
+local secondsLeft = 9e9 -- Make sure to use this when finishing the script = LRM_SecondsLeft or 0
+local discordID = LRM_LinkedDiscordID or "Uknown"
+
+-- Function to update license timer
+local function updateLicenseTime()
+    local wholeNumber = math.floor(secondsLeft)
+
+    local hours = math.floor(wholeNumber / 3600)
+    local minutes = math.floor((wholeNumber % 3600) / 60)
+    local seconds = wholeNumber % 60
+
+    local timeFormatted = string.format("%02d:%02d:%02d", hours, minutes, seconds)
+    stringTimer = "License Duration: " .. timeFormatted
+
+    if wholeNumber <= 0 then
+        stringTimer = "License Duration: Expired"
+        player:Kick("Your Key has expired - Go Get A New One!")
+    else
+        secondsLeft -= 1
+    end
+end
+
+-- Initializing License
+updateLicenseTime()
+
+-- Extra User information
+home_group_features.licenseStatusLabel = groupBoxes.homeGroup3:AddLabel("License: ".. keyStatus, false)
+home_group_features.licenseTimerLabel = groupBoxes.homeGroup3:AddLabel(stringTimer, false)
+home_group_features.licenseExecutionsLabel = groupBoxes.homeGroup3:AddLabel("Total Executions: ".. totalExecutions, false)
+home_group_features.discordIdLabel = groupBoxes.homeGroup3:AddLabel("Discord ID: ".. discordID, false)
+
+-- Updating License Timer
+local update_license_timer_connection = task.spawn(function()
+	while true do
+        updateLicenseTime()
+		home_group_features.licenseTimerLabel:SetText(stringTimer, true)
+
+		task.wait(1)
+	end
+end)
+
+--------------- H O M E   G R O U P   4 ---------------
+home_group_features.youtubeLinkButton = groupBoxes.homeGroup4:AddButton("youtube_link_flag", {
+    Text = "Youtube",
+    Func = function()
+        if setclipboard then
+            setclipboard("https://www.youtube.com/@maxcomuk")
+
+            Library:Notify("Sucessfully Copied Link", 3, 3450794184)
+        else
+            Library:Notify({
+                Title = "Failed to copy Link",
+                Description = "Your executor doesnt support this feature",
+                Time = 3,
+                SoundId = 2865228021
+            })
+        end
+    end
+})
+
+home_group_features.discordLinkButton = groupBoxes.homeGroup4:AddButton("discord_link_flag", {
+    Text = "Discord",
+    Func = function()
+        if setclipboard then
+            setclipboard("https://discord.gg/83FMrpBEnG")
+
+            Library:Notify("Sucessfully Copied Link", 3, 3450794184)
+        else
+            Library:Notify({
+                Title = "Failed to copy Link",
+                Description = "Your executor doesnt support this feature",
+                Time = 3,
+                SoundId = 2865228021
+            })
+        end
+    end
+})
+
+home_group_features.shopLinkButton = groupBoxes.homeGroup4:AddButton("shop_link_flag", {
+    Text = "Store",
+    Func = function()
+        if setclipboard then
+            setclipboard("https://vortexhubpremiumkeys.mysellauth.com/")
+            
+            Library:Notify("Sucessfully Copied Link", 3, 3450794184)
+        else
+            Library:Notify({
+                Title = "Failed to copy Link",
+                Description = "Your executor doesnt support this feature",
+                Time = 3,
+                SoundId = 2865228021
+            })
+        end
+    end
+})
+
+-------------------- H O M E   G R O U P   5 --------------------
+-- Disaplying Unc Results
+for method, isSupported in pairs(executorSupported) do
+    if isSupported then
+        home_group_features[method] = groupBoxes.homeGroup5:AddLabel(method .. ": ✅ Supported")
+    else
+        home_group_features[method] = groupBoxes.homeGroup5:AddLabel(method .. ": ❌ Not supported")
+    end
+end
+
+------------------ C O M B A T   G R O U P   1 ------------------
+-- Combat Group Container
+local combat_group_features = {}
+
+-- Combat Modifications
+local combatMod = {}
+
+------------------ P L A Y E R   G R O U P   1 ------------------
+-- Player Group Container
+local player_group_features = {}
+
+-- WalkSpeed Modification
+local playerMod = {}
+playerMod.walkSpeedValue = 16
+playerMod.jumpPowerValue = 50
+
+-- Fly Configs --
+playerMod.flySpeed = 1
+playerMod.isFlying = false
+playerMod.BG = nil
+playerMod.BV = nil
+
+-- Modify WalkSpeed Function
+function playerMod:ModifyWalkSpeed()
+    if globalVar.globalConnections.walkSpeedConnection then
+        globalVar.globalConnections.walkSpeedConnection:Disconnect()
+    end
+
+    globalVar.hum.WalkSpeed = self.walkSpeedValue
+    globalVar.globalConnections.walkSpeedConnection =  globalVar.hum:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+        if globalVar.hum.WalkSpeed ~= self.walkSpeedValue then
+            globalVar.hum.WalkSpeed = self.walkSpeedValue
+        end
+    end)
+end
+
+-- Disable WalkSpeed Modification Function
+function playerMod:DisableWalkSpeedModification()
+    if globalVar.globalConnections.walkSpeedConnection then
+        globalVar.globalConnections.walkSpeedConnection:Disconnect()
+    end
+
+    globalVar.hum.WalkSpeed = 16
+end
+
+-- Modify JumpPower Function
+function playerMod:ModifyJumpPower()
+    if globalVar.globalConnections.jumpConnection then
+        globalVar.globalConnections.jumpConnection:Disconnect()
+    end
+
+    globalVar.hum.UseJumpPower = true
+    globalVar.hum.JumpPower = self.jumpPowerValue
+    globalVar.globalConnections.jumpConnection = globalVar.hum:GetPropertyChangedSignal("JumpPower"):Connect(function()
+        if globalVar.hum.JumpPower ~= self.jumpPowerValue then
+            globalVar.hum.JumpPower = self.jumpPowerValue
+        end
+    end)
+end 
+
+-- Disable JumpPower Modification Function
+function playerMod:DisableJumpPowerModification()
+    if globalVar.globalConnections.jumpConnection then
+        globalVar.globalConnections.jumpConnection:Disconnect()
+    end
+
+    globalVar.hum.UseJumpPower = false
+end
+
+-- Enable PC Fly Function
+function playerMod:EnableFlight()
+    if self.isFlying then return end
+    self.isFlying = true
+    self.flyEnabled = false
+
+    if globalVar.globalConnections.flyInputUpConnection then
+        globalVar.globalConnections.flyInputUpConnection:Disconnect()
+    end
+    if globalVar.globalConnections.flyInputDownConnection then
+        globalVar.globalConnections.flyInputDownConnection:Disconnect()
+    end
+    if globalVar.globalConnections.flyConnection then
+        globalVar.globalConnections.flyConnection:Disconnect()
+    end
+
+    local CONTROL = {F=0,B=0,L=0,R=0,Q=0,E=0}
+    local SPEED = 0
+    local camera = workspace.CurrentCamera
+
+    globalVar.globalConnections.flyInputUpConnection = Uis.InputBegan:Connect(function(input, gpe)
+        if gpe then return end
+        if input.KeyCode == Enum.KeyCode.F then
+            self.flyEnabled = not self.flyEnabled
+            globalVar.hum.PlatformStand = self.flyEnabled
+
+            if self.flyEnabled then
+                self.BG = Instance.new("BodyGyro")
+                self.BG.P = 9e4
+                self.BG.MaxTorque = Vector3.new(9e9,9e9,9e9)
+                self.BG.CFrame = globalVar.root.CFrame
+                self.BG.Parent = globalVar.root
+
+                self.BV = Instance.new("BodyVelocity")
+                self.BV.MaxForce = Vector3.new(9e9,9e9,9e9)
+                self.BV.Velocity = Vector3.zero
+                self.BV.Parent = globalVar.root
+            else
+                if self.BG then self.BG:Destroy() self.BG=nil end
+                if self.BV then self.BV:Destroy() self.BV=nil end
+            end
+        end
+
+        if not self.flyEnabled then return end
+
+        if input.KeyCode == Enum.KeyCode.W then CONTROL.F = self.flySpeed
+        elseif input.KeyCode == Enum.KeyCode.S then CONTROL.B = -self.flySpeed
+        elseif input.KeyCode == Enum.KeyCode.A then CONTROL.L = -self.flySpeed
+        elseif input.KeyCode == Enum.KeyCode.D then CONTROL.R = self.flySpeed
+        elseif input.KeyCode == Enum.KeyCode.E then CONTROL.Q = self.flySpeed * 7
+        elseif input.KeyCode == Enum.KeyCode.Q then CONTROL.E = -self.flySpeed * 7
+        end
+    end)
+
+    globalVar.globalConnections.flyInputDownConnection = Uis.InputEnded:Connect(function(input)
+        if input.KeyCode == Enum.KeyCode.W then CONTROL.F = 0
+        elseif input.KeyCode == Enum.KeyCode.S then CONTROL.B = 0
+        elseif input.KeyCode == Enum.KeyCode.A then CONTROL.L = 0
+        elseif input.KeyCode == Enum.KeyCode.D then CONTROL.R = 0
+        elseif input.KeyCode == Enum.KeyCode.E then CONTROL.Q = 0
+        elseif input.KeyCode == Enum.KeyCode.Q then CONTROL.E = 0
+        end
+    end)
+
+    globalVar.globalConnections.flyConnection = RunService.Heartbeat:Connect(function()
+        if self.flyEnabled and self.BV and self.BG then
+            if CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 or CONTROL.Q + CONTROL.E ~= 0 then
+                SPEED = 50
+            else
+                SPEED = 0
+            end
+
+            if SPEED ~= 0 then
+                self.BV.Velocity = ((camera.CFrame.LookVector * (CONTROL.F + CONTROL.B)) + ((camera.CFrame * CFrame.new(CONTROL.L + CONTROL.R, (CONTROL.F + CONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - camera.CFrame.p)) * SPEED
+            else
+                self.BV.Velocity = Vector3.zero
+            end
+
+            self.BG.CFrame = camera.CFrame
+        end
+    end)
+end
+
+-- Disable Flight Function
+function playerMod:DisableFlight()
+    if not self.isFlying then return end
+    self.isFlying = false
+    self.flyEnabled = false
+
+    if globalVar.globalConnections.flyInputUpConnection then
+        globalVar.globalConnections.flyInputUpConnection:Disconnect()
+    end
+    if globalVar.globalConnections.flyInputDownConnection then
+        globalVar.globalConnections.flyInputDownConnection:Disconnect()
+    end
+    if globalVar.globalConnections.flyConnection then
+        globalVar.globalConnections.flyConnection:Disconnect()
+    end
+
+    if self.BG then self.BG:Destroy() self.BG=nil end
+    if self.BV then self.BV:Destroy() self.BV=nil end
+
+    globalVar.hum.PlatformStand = false
+end
+
+-- Enable Mobile Flight Function
+function playerMod:EnableMobileFlight()
+    local v3zero = Vector3.new(0, 0, 0)
+    local v3inf = Vector3.new(9e9, 9e9, 9e9)
+
+    if globalVar.mobileFlyConn then
+        globalVar.mobileFlyConn:Disconnect()
+        globalVar.mobileFlyConn = nil
+    end
+
+    if not globalVar.root:FindFirstChild("MobileBV") then
+        local BV = Instance.new("BodyVelocity")
+        BV.Name = "MobileBV"
+        BV.Parent = getgenv().root
+        BV.MaxForce = v3zero
+        BV.Velocity = v3zero
+    end
+
+    if not globalVar.root:FindFirstChild("MobileBG") then
+        local BG = Instance.new("BodyGyro")
+        BG.Name = "MobileBG"
+        BG.Parent = getgenv().root
+        BG.MaxTorque = v3inf
+        BG.P = 1000
+        BG.D = 50
+    end
+
+    globalVar.mobileFlyConn = RunService.RenderStepped:Connect(function()
+        if globalVar.root and globalVar.hum then
+            globalVar.hum.PlatformStand = true
+
+            local camera = workspace.CurrentCamera
+            local BV = globalVar.root:FindFirstChild("MobileBV")
+            local BG = globalVar.root:FindFirstChild("MobileBG")
+            if BV and BG then
+                BG.CFrame = camera.CFrame
+                BV.MaxForce = v3inf
+                BV.Velocity = v3zero
+
+                local direction
+                local isValid, err = pcall(function()
+                    direction = ControlModule:GetMoveVector()
+                end)
+
+                if not isValid and err then
+                    Library:Notify("Not found players control module script", 3, 2865228021)
+                    self:DisableMobileFlight()
+                    return
+                end
+
+                local speed = 50
+                BV.Velocity = camera.CFrame.RightVector * direction.X * speed - camera.CFrame.LookVector * direction.Z * speed
+            end
+        end
+    end)
+end
+
+-- Disable Mobile Flight Function
+function playerMod:DisableMobileFlight()
+    if globalVar.mobileFlyConn then
+        globalVar.mobileFlyConn:Disconnect()
+        globalVar.mobileFlyConn = nil
+    end
+
+    if globalVar.root:FindFirstChild("MobileBV") then
+        globalVar.root.MobileBV:Destroy()
+    end
+
+    if globalVar.root:FindFirstChild("MobileBG") then
+        globalVar.root.MobileBG:Destroy()
+    end
+
+    if globalVar.hum then
+        globalVar.hum.PlatformStand = false
+    end
+end
+
+-- Modify WalkSpeed Toggle
+player_group_features.modifyWalkSpeedToggle = groupBoxes.playerGroup1:AddToggle("modify_walkspeed_toggle", {
+    Text = "Modify WalkSpeed",
+    Callback = function(state)
+        if state then
+            playerMod:ModifyWalkSpeed()
+        else
+            playerMod:DisableWalkSpeedModification()
+        end
+    end
+})
+
+Toggles.walkSpeedSlider = groupBoxes.playerGroup1:AddDependencyBox()
+Toggles.walkSpeedSlider:AddSlider("walkspeed_slider", {
+    Text = "WalkSpeed Value",
+    Default = 16,
+    Min = 0,
+    Max = 360,
+    Callback = function(value)
+        if value ~= nil then
+            playerMod.walkSpeedValue = value
+            globalVar.hum.WalkSpeed = value
+        end
+    end
+})
+
+-- Enable JumpPower Toggle
+player_group_features.enableJumpPowerToggle = groupBoxes.playerGroup1:AddToggle("enable_jumppower_toggle", {
+    Text = "Enable JumpPower",
+    Callback = function(state)
+        if state then
+            playerMod:ModifyJumpPower()
+        else
+            playerMod:DisableJumpPowerModification()
+        end
+    end
+})
+
+Toggles.jumpPowerSlider = groupBoxes.playerGroup1:AddDependencyBox()
+Toggles.jumpPowerSlider:AddSlider("jumppower_slider", {
+    Text = "JumpPower Value",
+    Default = 50,
+    Min = 10,
+    Max = 360,
+    Callback = function(value)
+        if value ~= nil then
+            playerMod.jumpPowerValue = value
+            globalVar.hum.JumpPower = value
+        end
+    end
+})
+
+-- Fly Toggle
+player_group_features.flyToggle = groupBoxes.playerGroup1:AddToggle("fly_toggle", {
+    Text = "Fly",
+    Tooltip = "Press F to fly",
+    Callback = function(state)
+        if state then
+            playerMod:EnableFlight()
+        else
+            playerMod:DisableFlight()
+        end 
+    end
+})
+
+-- Fly Dependancy Slider
+Toggles.flySpeedSlider = groupBoxes.playerGroup1:AddDependencyBox()
+Toggles.flySpeedSlider:AddSlider("fly_speed_slider", {
+    Text = "Fly Speed",
+    Default = 1,
+    Min = 1,
+    Max = 7,
+    Callback = function(value)
+        if value ~= nil and tonumber(value) and value > 0 then
+            playerMod.flySpeed = tonumber(value)
+        end
+    end
+})
+
+-- Mobile Fly Toggle
+player_group_features.mobileFlyToggle = groupBoxes.playerGroup1:AddToggle("mobile_fly_toggle", {
+    Text = "Mobile Fly",
+    Callback = function(state)
+        if state then
+            playerMod:EnableMobileFlight()
+        else
+            playerMod:DisableMobileFlight()
+        end
+    end
+})
+
+Toggles.walkSpeedSlider:SetupDependencies({
+    { DependancyToggles.modify_walkspeed_toggle, true }
+})
+
+Toggles.jumpPowerSlider:SetupDependencies({
+    { DependancyToggles.enable_jumppower_toggle, true }
+})
+
+Toggles.flySpeedSlider:SetupDependencies({
+    { DependancyToggles.fly_toggle, true }
+})
+
+------------------ U I   S E T T I N G S -------------------------
+-- Container for Ui-Settings Features
+local ui_settings_features = {}
+
+-- Qeueonteleport Script Toggle
+ui_settings_features.queueonteleportScriptToggle = groupBoxes.settingsGroup1:AddToggle("qeueonteleport_script_toggle", {
+    Text = "Auto-Run Script",
+    Default = true,
+    Callback = function(state)
+        getgenv().scriptQueued = state
+    end
+})
+
+if ui_settings_features.queueonteleportScriptToggle.Value then
+    getgenv().scriptQueued = true
+end
+
+-- Show Keybind Menu Toggle
+ui_settings_features.showKeybindMenuToggle = groupBoxes.settingsGroup1:AddToggle("show_keybind_menu", {
+    Text = "Show Keybind Menu",
+    Default = false,
+    Tooltip = "Displays the list of the keybinds you have assigned",
+    Callback = function(state)
+        Library.KeybindFrame.Visible = state
+    end
+})
+
+-- Custom Cursor Toggle
+ui_settings_features.customCursor = groupBoxes.settingsGroup1:AddToggle("custom_cursor_flag", {
+    Text = "Custom Cursor",
+    Default = false,
+    Tooltip = "Changes cursor to a pre-built one",
+    Callback = function(state)
+        Library.ShowCustomCursor = state
+    end
+})
+
+-- Notifications Side Dropdown
+ui_settings_features.notificationsSideDropdown = groupBoxes.settingsGroup1:AddDropdown("notifications_side_dropdown_flag", {
+    Text = "Notifications Side",
+    Values = {"Left", "Right"},
+    Default = "Right",
+    Tooltip = "Changes where the notifications would be displayed on your screen",
+    Callback = function(state)
+        Library:SetNotifySide(state)
+    end
+})
+
+-- Minimize Ui Keybind
+ui_settings_features.minimizeUiKeybindLabel = groupBoxes.settingsGroup1:AddLabel("Menu Bind", false)
+ui_settings_features.minimizeUiKeybind = ui_settings_features.minimizeUiKeybindLabel:AddKeyPicker("minimize_ui_keybind", {
+    Text = "Minimize Ui",
+    Default = "Insert",
+})
+
+-- Setting keybind to minimize the ui
+Library.ToggleKeybind = Library.Options.minimize_ui_keybind
+
+-- Unloading Ui Function
+ui_settings_features.unloadUiButton = groupBoxes.settingsGroup1:AddButton("unloading_ui_flag", {
+    Text = "Unload",
+    Tooltip = "Safely destroys the ui and disables all its features",
+    Func = function()
+        Library:Unload()
+    end
+})
+
+------------------ T H E M E   M A N A G E R --------------------
+-- register the library so ThemeManager can manipulate controls
+ThemeManager:SetLibrary(Library)
+
+-- Applying Custom Default Theme
+ThemeManager:SetDefaultTheme({
+    FontColor = "#ffffff",
+    MainColor = "#191919",
+    AccentColor = "#7d55ff",
+    BackgroundColor = "#0f0f0f",
+    OutlineColor = "#2a2a2a",
+    FontFace = "Fantasy",
+})
+
+-- automatically creates the color pickers, theme lists and buttons
+ThemeManager:ApplyToTab(tabs.settingsTab)
+
+-- apply whatever theme is flagged as default (built-in or custom)
+ThemeManager:LoadDefault()
+
+------------------ S A V E    M A N A G E R ---------------------
+-- Setting the libary to save manager save manager
+SaveManager:SetLibrary(Library)
+ 
+-- Map out folder structure
+SaveManager:SetFolder("Vortex Hub/Fisch")
+ 
+-- Builds our config menu on the right side of our tab
+SaveManager:BuildConfigSection(tabs.settingsTab)
+ 
+-- Load the autoload config
+SaveManager:LoadAutoloadConfig()
+
+-- / / / -- H A N D L I N G   C H A R A C T E R   R E S P A W N S ------- / / / --
+globalVar.globalConnections.characterAddedConnection = globalVar.player.CharacterAdded:Connect(function(newChar)
+    -- Updating Player Variables --
+    globalVar.char = newChar
+    globalVar.root = globalVar.char:WaitForChild("HumanoidRootPart")
+    globalVar.hum = globalVar.char:WaitForChild("Humanoid")
+
+    -- Applying Combat Modifications
+    if combat_group_features.noAttackCooldownToggle.Value == true then
+        combatTab:BypassAttackCooldown()
+    end
+
+    -- Applying Player Modifications
+    if player_group_features.modifyWalkSpeedToggle.Value == true then
+        playerMod:ModifyWalkSpeed()
+    end
+
+    if player_group_features.enableJumpPowerToggle.Value == true then
+        playerMod:ModifyJumpPower()
+    end
+
+    if player_group_features.mobileFlyToggle.Value == true then
+        playerMod:EnableMobileFlight()
+    end
+
+    -- Applying spoofed username to the new character --
+    local old_spoofed_name = spoofed_username
+    spoof_username(globalVar.char.Name)
+    task.wait(1)
+    spoof_username(old_spoofed_name)
+end)
+
+-- / / / ------------ A U T O   Q E U E I N G   S C R I P T   ------------/ / / --
+local function queu_script_to_auto_run()
+    if globalVar.globalConnections.auto_run_connection then
+        globalVar.globalConnections.auto_run_connection:Disconnect()
+    end
+
+    globalVar.globalConnections.auto_run_connection = globalVar.player.OnTeleport:Connect(function()
+        if getgenv().scriptQueued then
+            QueueOnTeleport([[loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/f9059d67190aeb857735420435f323ea.lua"))()]])
+        end
+    end)
+end
+
+queu_script_to_auto_run()
+
+-- / / / ---------------- U N L O A D I N G   S C R I P T --------------- / / / --
+Library:OnUnload(function()
+    -- Canceling the infinite timer connection
+    task.cancel(update_license_timer_connection)
+    
+    -- Disconnecting Connections
+    for _, conn in next, globalVar.globalConnections do
+        if type(conn) == "table" then
+            for _, newConn in next, conn do
+                if newConn then
+                    newConn:Disconnect()
+                end
+            end
+        elseif conn then
+            conn:Disconnect()
+        end
+    end
+
+    -- Disabling Player Modifications
+    playerMod:DisableWalkSpeedModification()
+    playerMod:DisableJumpPowerModification()
+    playerMod:DisableFlight()
+    playerMod:DisableMobileFlight()
+end)
+
+-- Setting Values Back to Default State
+globalVar.players.PlayerRemoving:Connect(function(plr)
+    if plr ~= globalVar.player then return end
+    
+    -- Disconnecting Connections
+    for _, conn in next, globalVar.globalConnections do
+        if type(conn) == "table" then
+            for _, newConn in next, conn do
+                if newConn then
+                    newConn:Disconnect()
+                end
+            end
+        elseif conn then
+            conn:Disconnect()
+        end
+    end
+end)
